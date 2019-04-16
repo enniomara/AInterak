@@ -8,8 +8,9 @@
         <item>
 
             <bitmap
-                android:src="@drawable/product_logo_144dp"
-                android:gravity="center"/>
+                android:src="@drawable/buska_logo"
+                android:gravity="fill"
+                android:layout_width="match_parent" />
 
         </item>
 
