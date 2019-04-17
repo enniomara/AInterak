@@ -33,4 +33,8 @@ dependencies {
         mavenCentral()
     }
     implementation "com.sothree.slidinguppanel:library:3.4.0"
+    // Room provides an abstraction layer over SQLite to allow fluent database access while harnessing the full power of SQLite.
+    def room_version = "2.1.0-alpha06"
+    implementation "androidx.room:room-runtime:$room_version"
+    testImplementation "androidx.room:room-testing:$room_version"
 }
