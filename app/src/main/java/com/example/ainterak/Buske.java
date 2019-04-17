@@ -17,8 +17,11 @@ public class Buske {
     @ColumnInfo(name = "name")
     public String name;
 
-    @ColumnInfo(name = "coords")
-    public int coords;
+    @ColumnInfo(name = "longitude")
+    public double longitude;
+
+    @ColumnInfo(name = "latitude")
+    public double latitude;
 
     @ColumnInfo(name = "description")
     public String description;
