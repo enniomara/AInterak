@@ -33,4 +33,10 @@ dependencies {
         mavenCentral()
     }
     implementation "com.sothree.slidinguppanel:library:3.4.0"
+    // Using 1.1.1 because we cant use newer
+    def room_version = "1.1.1"
+    implementation "android.arch.persistence.room:runtime:$room_version"
+    annotationProcessor "android.arch.persistence.room:compiler:$room_version"
+    // Test helpers
+    testImplementation "android.arch.persistence.room:testing:$room_version"
 }
