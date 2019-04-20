@@ -37,7 +37,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             mLayout.setAnchorPoint(0.5f); // slide up 50% then stop
             //mLayout.setPanelState(SlidingUpPanelLayout.PanelState.ANCHORED);
         }
-        /*recyclerView = (RecyclerView) findViewById(R.id.menu_list);
+        recyclerView = (RecyclerView) findViewById(R.id.menu_list);
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
@@ -48,8 +48,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         recyclerView.setLayoutManager(layoutManager);
 
         // specify an adapter (see also next example)
-        mAdapter = new MyAdapter(new String[] {});
-        recyclerView.setAdapter(mAdapter);*/
+        mAdapter = new MyAdapter(new String[] {"test","test2","test3"});
+        recyclerView.setAdapter(mAdapter);
     }
 
 
