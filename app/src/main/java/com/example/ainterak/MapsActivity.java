@@ -32,6 +32,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+
+        // Code for the sliding panel and its list
         mLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
         if (mLayout != null) {
             mLayout.setAnchorPoint(0.5f); // slide up 50% then stop
