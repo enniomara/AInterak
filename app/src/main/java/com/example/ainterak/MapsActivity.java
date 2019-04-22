@@ -50,7 +50,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         recyclerView.setLayoutManager(layoutManager);
 
         // specify an adapter (see also next example)
-        mAdapter = new MyAdapter(new String[] {"test","test2","test3"});
+        mAdapter = new MyAdapter(new String[] {"test","test2","test3","djkfölskjiohfhxckvjbnkfjdseiortueroupowipterjgldk"});
         recyclerView.setAdapter(mAdapter);
     }
 
