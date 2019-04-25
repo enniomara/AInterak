@@ -2,8 +2,6 @@ package com.example.ainterak;
 
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -11,15 +9,10 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-    private SlidingUpPanelLayout mLayout;
-    private RecyclerView recyclerView;
-    private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager layoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +26,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
 
         //Setup for the menu slider
-        initializeSlider();
+        MenuSlider menuSlider = new MenuSlider(this);
     }
 
 
@@ -56,23 +49,4 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
 
-    private void initializeSlider(){
-        mLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
-        if (mLayout != null) {
-            mLayout.setAnchorPoint(0.5f); // slide up 50% then stop
-        }
-        recyclerView = (RecyclerView) findViewById(R.id.menu_list);
-
-        // use this setting to improve performance if you know that changes
-        // in content do not change the layout size of the RecyclerView
-        recyclerView.setHasFixedSize(true);
-
-        // use a linear layout manager
-        layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-
-        // specify an adapter (see also next example)
-        mAdapter = new MyAdapter(new String[] {"test","test2","test3","djkfölskjiohfhxckvjbnkfjdseiortueroupowipterjgldk"});
-        recyclerView.setAdapter(mAdapter);
-    }
 }
