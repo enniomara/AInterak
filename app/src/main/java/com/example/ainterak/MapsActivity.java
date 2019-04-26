@@ -33,6 +33,9 @@ public class MapsActivity extends FragmentActivity implements
                 .findFragmentById(R.id.map);
         mapView = mapFragment.getView();
         mapFragment.getMapAsync(this);
+
+        //Setup for the menu slider
+        MenuSlider menuSlider = new MenuSlider(this);
     }
 
 
@@ -79,4 +82,5 @@ public class MapsActivity extends FragmentActivity implements
     @Override
     public void onMyLocationClick(@NonNull Location location) {
     }
+
 }
