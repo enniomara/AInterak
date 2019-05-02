@@ -1,18 +1,19 @@
 package com.example.ainterak;
 
 import android.location.Location;
-import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.RelativeLayout;
-
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 public class MapsActivity extends FragmentActivity implements
         OnMapReadyCallback,
@@ -20,6 +21,7 @@ public class MapsActivity extends FragmentActivity implements
         GoogleMap.OnMyLocationButtonClickListener {
 
     private GoogleMap mMap;
+    private LocationProvider mLocationProvider;
     View mapView;
 
     @Override
@@ -36,8 +38,24 @@ public class MapsActivity extends FragmentActivity implements
 
         //Setup for the menu slider
         MenuSlider menuSlider = new MenuSlider(this);
-    }
 
+        try {
+            mLocationProvider = new LocationProvider(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        mLocationProvider.getLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                if (location == null) {
+                    Log.d("locationD", "Location was null");
+                    return;
+                }
+                Log.d("locationD", location.getLongitude() + " latitude " + location.getLatitude());
+            }
+        });
+    }
 
     /**
      * Manipulates the map once available.
