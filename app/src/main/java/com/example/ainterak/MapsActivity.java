@@ -48,6 +48,10 @@ public class MapsActivity extends FragmentActivity implements
         mLocationProvider.getLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
             @Override
             public void onSuccess(Location location) {
+                if (location == null) {
+                    Log.d("locationD", "Location was null");
+                    return;
+                }
                 Log.d("locationD", location.getLongitude() + " latitude " + location.getLatitude());
             }
         });
