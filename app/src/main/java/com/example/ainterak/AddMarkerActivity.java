@@ -1,15 +1,14 @@
 package com.example.ainterak;
 
-import android.content.Context;
 import android.location.Location;
-import android.location.LocationManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -26,18 +25,19 @@ public class AddMarkerActivity extends FragmentActivity implements
     private LocationProvider mLocationProvider;
     private View mapView;
     private GoogleMap mMap;
-    private Location currentLocation;
-    private LocationManager mLocationManager;
+    private FusedLocationProviderClient fusedLocationClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_marker);
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.marker_map);
         mapView = mapFragment.getView();
+        mapFragment.getMapAsync(this);
 
         try {
             mLocationProvider = new LocationProvider(this);
@@ -56,6 +56,7 @@ public class AddMarkerActivity extends FragmentActivity implements
             }
         });
 
+
     }
 
     public void saveMarker(View view) {
@@ -71,15 +72,32 @@ public class AddMarkerActivity extends FragmentActivity implements
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.setMyLocationEnabled(true);
-        mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        currentLocation = mLocationProvider.getLocation().getResult();
-        LatLng latLng = new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude());
-        Location location = mLocationManager.getLastKnownLocation(LocationManager.KEY_LOCATION_CHANGED);
-        mMap.addMarker(new MarkerOptions().position(latLng).title("Current Location"));
+        mMap.getUiSettings().setMyLocationButtonEnabled(false);
 
+        new java.util.Timer().schedule(new java.util.TimerTask() {
+            @Override
+            public void run() {
+                getCurrentLocation();
+            }
+        }, 500);
+    }
+
+    private void fixateCamera(LatLng latLng) {
+        mMap.addMarker(new MarkerOptions().position(latLng).title("Current Location"));
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13));
         CameraPosition cp = new CameraPosition.Builder()
                 .target(latLng).zoom(17).build();
         mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cp));
+    }
+
+    private void getCurrentLocation() {
+        fusedLocationClient.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                if(location != null) {
+                    fixateCamera(new LatLng(location.getLatitude(),location.getLongitude()));
+                }
+            }
+        });
     }
 }
