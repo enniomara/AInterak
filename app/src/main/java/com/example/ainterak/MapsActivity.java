@@ -1,6 +1,8 @@
 package com.example.ainterak;
 
+import android.content.Intent;
 import android.location.Location;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -38,6 +40,7 @@ public class MapsActivity extends FragmentActivity implements
 
         //Setup for the menu slider
         MenuSlider menuSlider = new MenuSlider(this);
+        menuSlider.initSlider();
 
         try {
             mLocationProvider = new LocationProvider(this);
@@ -99,6 +102,11 @@ public class MapsActivity extends FragmentActivity implements
 
     @Override
     public void onMyLocationClick(@NonNull Location location) {
+    }
+
+    public void openAddMarker(View view) {
+        Intent intent = new Intent(this, AddMarkerActivity.class);
+        startActivity(intent);
     }
 
 }
