@@ -8,8 +8,7 @@
         <item>
 
             <bitmap
-                android:src="@drawable/buska_logo"
-                android:gravity="fill"
+                android:src="@drawable/buska_splash"
                 android:layout_width="match_parent" />
 
         </item>
