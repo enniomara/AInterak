@@ -6,6 +6,8 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -18,6 +20,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 
+import java.util.Date;
+
 public class AddMarkerActivity extends FragmentActivity implements
         OnMapReadyCallback,
         GoogleMap.OnMyLocationClickListener{
@@ -26,6 +30,7 @@ public class AddMarkerActivity extends FragmentActivity implements
     private View mapView;
     private GoogleMap mMap;
     private FusedLocationProviderClient fusedLocationClient;
+    private Location markerLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,8 +64,13 @@ public class AddMarkerActivity extends FragmentActivity implements
 
     }
 
-    public void saveMarker(View view) {
-
+    public void saveMarker() {
+        TextView name = findViewById(R.id.marker_name_field);
+        EditText description = findViewById(R.id.description_box);
+        name.getText();
+        description.getText();
+        // Hämta information från databasen
+        Buske buske = new Buske();
     }
 
     @Override
@@ -96,6 +106,7 @@ public class AddMarkerActivity extends FragmentActivity implements
             public void onSuccess(Location location) {
                 if(location != null) {
                     fixateCamera(new LatLng(location.getLatitude(),location.getLongitude()));
+                    markerLocation = location;
                 }
             }
         });
