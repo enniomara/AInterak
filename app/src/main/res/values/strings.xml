@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Buska</string>
+    <string name="location_title">Location</string>
+    <string name="accept">Accept</string>
+    <string name="location_text">Buska needs your location to be able to track your current location and guide you to your stored markers.</string>
+    <string name="all_permission_granted">All Permissions Granted Successfully</string>
+    <string name="permission_granted">Permission Granted</string>
+    <string name="permission_denied">Permission Denied</string>
 </resources>
