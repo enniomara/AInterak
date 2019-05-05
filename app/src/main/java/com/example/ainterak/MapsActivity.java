@@ -1,12 +1,13 @@
 package com.example.ainterak;
 
 import android.location.Location;
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -36,8 +37,9 @@ public class MapsActivity extends FragmentActivity implements
         mapView = mapFragment.getView();
         mapFragment.getMapAsync(this);
 
-        //Setup for the menu slider
-        MenuSlider menuSlider = new MenuSlider(this);
+        BuskeRepository buskeRepository = new BuskeRepository(getApplicationContext());
+        MenuSlider menuSlider = new MenuSlider(this, buskeRepository);
+        menuSlider.initSlider();
 
         try {
             mLocationProvider = new LocationProvider(this);

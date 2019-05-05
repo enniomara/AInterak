@@ -1,21 +1,29 @@
 package com.example.ainterak;
 
-import android.app.Activity;
+import android.arch.lifecycle.Observer;
+import android.support.annotation.Nullable;
+import android.support.v4.app.SupportActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MenuSlider {
 
-    private Activity activity;
+    private SupportActivity activity;
     private SlidingUpPanelLayout mLayout;
     private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
 
-    public MenuSlider(Activity activity) {
+    private BuskeRepository buskeRepository;
+
+    public MenuSlider(SupportActivity activity, BuskeRepository buskeRepository) {
         this.activity = activity;
+        this.buskeRepository = buskeRepository;
     }
 
     public void initSlider() {
@@ -33,9 +41,21 @@ public class MenuSlider {
         layoutManager = new LinearLayoutManager(activity);
         recyclerView.setLayoutManager(layoutManager);
 
-        // specify an adapter (see also next example)
-        mAdapter = new MyAdapter(new String[]{"test", "test2", "test3", "djkfölskjiohfhxckvjbnkfjdseiortueroupowipterjgldk"});
-        recyclerView.setAdapter(mAdapter);
+        buskeRepository.findAll().observe(activity, new Observer<List<Buske>>() {
+            @Override
+            public void onChanged(@Nullable List<Buske> buskar) {
+                if (buskar == null) {
+                    return;
+                }
+
+                ArrayList<String> names = new ArrayList<>();
+                for (Buske buske : buskar) {
+                    names.add(buske.name);
+                }
+
+                setNewDataset(names.toArray(new String[buskar.size()]));
+            }
+        });
     }
 
     public void setNewDataset(String[] dataset) {
