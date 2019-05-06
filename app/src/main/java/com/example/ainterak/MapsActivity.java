@@ -2,7 +2,6 @@ package com.example.ainterak;
 
 import android.content.Intent;
 import android.location.Location;
-import android.support.design.widget.FloatingActionButton;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
