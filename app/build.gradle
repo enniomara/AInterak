@@ -41,4 +41,6 @@ dependencies {
     annotationProcessor "android.arch.persistence.room:compiler:$room_version"
     // Test helpers
     testImplementation "android.arch.persistence.room:testing:$room_version"
+    debugImplementation 'com.amitshekhar.android:debug-db:1.0.6'
+
 }

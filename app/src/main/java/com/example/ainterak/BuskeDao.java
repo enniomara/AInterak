@@ -1,5 +1,6 @@
 package com.example.ainterak;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
@@ -15,7 +16,7 @@ import java.util.List;
 @Dao
 public interface BuskeDao {
     @Query("SELECT * FROM buske")
-    List<Buske> getAll();
+    LiveData<List<Buske>> getAll();
 
     @Insert
     void insertBuske(Buske buske);

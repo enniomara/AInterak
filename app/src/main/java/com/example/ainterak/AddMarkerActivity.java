@@ -31,6 +31,7 @@ public class AddMarkerActivity extends FragmentActivity implements
     private GoogleMap mMap;
     private FusedLocationProviderClient fusedLocationClient;
     private Location markerLocation;
+    private BuskeRepository buskeRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +44,8 @@ public class AddMarkerActivity extends FragmentActivity implements
                 .findFragmentById(R.id.marker_map);
         mapView = mapFragment.getView();
         mapFragment.getMapAsync(this);
+
+        buskeRepository = new BuskeRepository(getApplicationContext());
 
         try {
             mLocationProvider = new LocationProvider(this);
@@ -64,13 +67,21 @@ public class AddMarkerActivity extends FragmentActivity implements
 
     }
 
-    public void saveMarker() {
+    public void saveMarker(View view) {
         TextView name = findViewById(R.id.marker_name_field);
         EditText description = findViewById(R.id.description_box);
-        name.getText();
-        description.getText();
-        // Hämta information från databasen
         Buske buske = new Buske();
+        buske.date = new Date();
+        buske.name = name.getText().toString();
+        buske.description = description.getText().toString();
+        buske.latitude = markerLocation.getLatitude();
+        buske.longitude = markerLocation.getLongitude();
+        buskeRepository.create(buske);
+        finish();
+    }
+
+    public void cancel(View view) {
+        finish();
     }
 
     @Override
