@@ -20,7 +20,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 
-import java.util.Date;
 
 public class AddMarkerActivity extends FragmentActivity implements
         OnMapReadyCallback,
