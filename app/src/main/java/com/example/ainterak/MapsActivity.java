@@ -1,5 +1,6 @@
 package com.example.ainterak;
 
+import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -101,6 +102,11 @@ public class MapsActivity extends FragmentActivity implements
 
     @Override
     public void onMyLocationClick(@NonNull Location location) {
+    }
+
+    public void openAddMarker(View view) {
+        Intent intent = new Intent(this, AddMarkerActivity.class);
+        startActivity(intent);
     }
 
 }
