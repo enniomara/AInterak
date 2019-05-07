@@ -27,7 +27,6 @@ public class AddMarkerActivity extends FragmentActivity implements
         GoogleMap.OnMyLocationClickListener{
 
     private LocationProvider mLocationProvider;
-    private View mapView;
     private GoogleMap mMap;
     private FusedLocationProviderClient fusedLocationClient;
     private Location markerLocation;
@@ -42,7 +41,6 @@ public class AddMarkerActivity extends FragmentActivity implements
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.marker_map);
-        mapView = mapFragment.getView();
         mapFragment.getMapAsync(this);
 
         buskeRepository = new BuskeRepository(getApplicationContext());
@@ -71,7 +69,6 @@ public class AddMarkerActivity extends FragmentActivity implements
         TextView name = findViewById(R.id.marker_name_field);
         EditText description = findViewById(R.id.description_box);
         Buske buske = new Buske();
-        buske.date = new Date();
         buske.name = name.getText().toString();
         buske.description = description.getText().toString();
         buske.latitude = markerLocation.getLatitude();
