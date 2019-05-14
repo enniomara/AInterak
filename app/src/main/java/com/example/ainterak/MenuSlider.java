@@ -1,6 +1,7 @@
 package com.example.ainterak;
 
 import android.arch.lifecycle.Observer;
+import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.support.v4.app.SupportActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -29,7 +30,9 @@ public class MenuSlider {
     public void initSlider() {
         mLayout = (SlidingUpPanelLayout) activity.findViewById(R.id.sliding_layout);
         if (mLayout != null) {
-            mLayout.setAnchorPoint(0.5f); // slide up 50% then stop
+            mLayout.setAnchorPoint(0.3f); // slide up 30% then stop
+            mLayout.setPanelState(SlidingUpPanelLayout.PanelState.ANCHORED);
+            mLayout.setCoveredFadeColor(Color.argb(0,0,0,0));
         }
         recyclerView = (RecyclerView) activity.findViewById(R.id.menu_list);
 
