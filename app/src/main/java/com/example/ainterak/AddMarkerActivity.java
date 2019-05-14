@@ -15,6 +15,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -100,7 +101,9 @@ public class AddMarkerActivity extends FragmentActivity implements
     }
 
     private void fixateCamera(LatLng latLng) {
-        mMap.addMarker(new MarkerOptions().position(latLng).title("Current Location"));
+        mMap.addMarker(new MarkerOptions().position(latLng)
+                .title("Current Location")
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.buska_marker_tiny)));
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13));
         CameraPosition cp = new CameraPosition.Builder()
                 .target(latLng).zoom(17).build();
