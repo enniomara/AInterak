@@ -103,7 +103,7 @@ public class AddMarkerActivity extends FragmentActivity implements
     private void fixateCamera(LatLng latLng) {
         mMap.addMarker(new MarkerOptions().position(latLng)
                 .title("Current Location")
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.buska_marker_tiny)));
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.buska_marker_140)));
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13));
         CameraPosition cp = new CameraPosition.Builder()
                 .target(latLng).zoom(17).build();
