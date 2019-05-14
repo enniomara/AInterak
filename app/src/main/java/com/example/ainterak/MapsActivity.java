@@ -15,8 +15,11 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
+
+import java.util.List;
 
 public class MapsActivity extends FragmentActivity implements
         OnMapReadyCallback,
@@ -26,6 +29,7 @@ public class MapsActivity extends FragmentActivity implements
     private GoogleMap mMap;
     private LocationProvider mLocationProvider;
     View mapView;
+    private BuskeRepository buskeRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +43,7 @@ public class MapsActivity extends FragmentActivity implements
         mapView = mapFragment.getView();
         mapFragment.getMapAsync(this);
 
-        BuskeRepository buskeRepository = new BuskeRepository(getApplicationContext());
+        buskeRepository = new BuskeRepository(getApplicationContext());
         MenuSlider menuSlider = new MenuSlider(this, buskeRepository);
         menuSlider.initSlider();
 
@@ -73,16 +77,10 @@ public class MapsActivity extends FragmentActivity implements
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(55, 13);
-        mMap.addMarker(new MarkerOptions().position(sydney)
-                .title("Marker in Sydney")
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.buska_marker_tiny)));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-
-        // TODO - check for permission
         mMap.setMyLocationEnabled(true);
+
+        addBuskarToMap();
+
         // Move go-to-my-location to bottom-right-corner
         if (mapView != null &&
                 mapView.findViewById(Integer.parseInt("1")) != null) {
@@ -112,4 +110,58 @@ public class MapsActivity extends FragmentActivity implements
         startActivity(intent);
     }
 
+    /**
+     * Populates the map with saved Buskar markers. If none are found, the map is centered to
+     * user's location.
+     */
+    private void addBuskarToMap() {
+        buskeRepository.findAll().observe(this, (List<Buske> buskar) -> {
+            if (buskar == null) {
+                return;
+            }
+
+            // If there are no saved bushes, center map to current location of user
+            if (buskar.isEmpty()) {
+                mLocationProvider.getLocation().addOnSuccessListener(this, (Location location) -> {
+                    if (location == null) return;
+                    mMap.moveCamera(CameraUpdateFactory.zoomTo(13));
+                    mMap.moveCamera(CameraUpdateFactory
+                            .newLatLng(new LatLng(location.getLatitude(), location.getLongitude()))
+                    );
+                });
+                return;
+            }
+
+            // Populate latLngBounds with the different buskar
+            LatLngBounds.Builder latLngBuilder = new LatLngBounds.Builder();
+            for (Buske buske : buskar) {
+                LatLng latLng = new LatLng(buske.latitude, buske.longitude);
+                mMap.addMarker(new MarkerOptions()
+                        .position(latLng)
+                        .title(buske.name)
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.buska_marker_tiny))
+                );
+                latLngBuilder.include(latLng);
+            }
+
+            int width = getResources().getDisplayMetrics().widthPixels;
+            int height = getResources().getDisplayMetrics().heightPixels;
+            int padding = (int) (height * 0.2); // offset from edges of the map 10% of screen
+
+            // Add the user's current location to latLngBounds. That way the user sees where its location is
+            // relative to the other buskar.
+            mLocationProvider.getLocation().addOnSuccessListener(this, (Location location) -> {
+                if (location == null) return;
+                latLngBuilder.include(new LatLng(location.getLatitude(), location.getLongitude()));
+                mMap.moveCamera(CameraUpdateFactory
+                        .newLatLngBounds(latLngBuilder.build(), width, height, padding)
+                );
+            });
+
+            // Limit zoom to 16. If it's higher then it is hard to find where on the map the user is.
+            if (mMap.getCameraPosition().zoom > 16) {
+                mMap.moveCamera(CameraUpdateFactory.zoomTo(16));
+            }
+        });
+    }
 }
