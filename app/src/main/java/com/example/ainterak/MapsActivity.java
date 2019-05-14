@@ -139,7 +139,7 @@ public class MapsActivity extends FragmentActivity implements
                 mMap.addMarker(new MarkerOptions()
                         .position(latLng)
                         .title(buske.name)
-                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.buska_marker_tiny))
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.buska_marker_140))
                 );
                 latLngBuilder.include(latLng);
             }
