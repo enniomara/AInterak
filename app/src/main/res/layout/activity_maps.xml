@@ -1,42 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<com.sothree.slidinguppanel.SlidingUpPanelLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.sothree.slidinguppanel.SlidingUpPanelLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:sothree="http://schemas.android.com/apk/res-auto"
     android:id="@+id/sliding_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="bottom"
     sothree:umanoPanelHeight="68dp"
-    sothree:umanoShadowHeight="4dp"
+    sothree:umanoShadowHeight="2dp"
     >
     <!--sothree:umanoScrollableView="@id/menu_list"-->
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:map="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/map"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".MapsActivity" />
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab"
+        android:clipChildren="false">
+
+        <fragment xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            tools:context=".MapsActivity" />
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="@dimen/fab_margin"
-            sothree:srcCompat="@drawable/ic_add"
-            android:layout_marginEnd="8dp"
+            android:layout_alignBottom="@+id/map"
             android:layout_alignParentEnd="true"
-            android:onClick="openAddMarker"/>
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:gravity="bottom|end"
+            android:orientation="vertical">
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/myLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:clickable="false"
+                sothree:backgroundTint="#fff"
+                sothree:srcCompat="@drawable/baseline_gps_fixed_24" />
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/addBuske"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="openAddMarker"
+                sothree:backgroundTint="@color/colorAccent"
+                sothree:srcCompat="@drawable/baseline_add_24" />
+
+        </LinearLayout>
+
     </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="60sp"
@@ -45,9 +71,9 @@
             android:textSize="16sp" />
 
         <android.support.v7.widget.RecyclerView
+            android:id="@+id/menu_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/menu_list"
             android:scrollbars="vertical" />
     </LinearLayout>
 

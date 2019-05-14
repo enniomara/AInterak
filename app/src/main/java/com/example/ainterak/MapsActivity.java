@@ -7,7 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.RelativeLayout;
+import android.widget.ImageView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -79,25 +79,22 @@ public class MapsActivity extends FragmentActivity implements
         mMap = googleMap;
         mMap.setMyLocationEnabled(true);
 
-        addBuskarToMap();
+        // There is a custom button that handles it
+        mMap.getUiSettings().setMyLocationButtonEnabled(false);
+        ((ImageView) findViewById(R.id.myLocation)).setOnClickListener((View view) -> {
+            onMyLocationButtonClick();
+        });
 
-        // Move go-to-my-location to bottom-right-corner
-        if (mapView != null &&
-                mapView.findViewById(Integer.parseInt("1")) != null) {
-            // Get the button view
-            View locationButton = ((View) mapView.findViewById(Integer.parseInt("1")).getParent()).findViewById(Integer.parseInt("2"));
-            // and next place it, on bottom right (as Google Maps app)
-            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams)
-                    locationButton.getLayoutParams();
-            // position on right bottom
-            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
-            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
-            layoutParams.setMargins(0, 0, 30, 30);
-        }
+        addBuskarToMap();
     }
 
     @Override
     public boolean onMyLocationButtonClick() {
+        mLocationProvider.getLocation().addOnSuccessListener(this, (Location location) -> {
+            if (location == null) return;
+            LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18));
+        });
         return false;
     }
 
