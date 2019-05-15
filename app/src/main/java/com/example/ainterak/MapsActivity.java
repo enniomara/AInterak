@@ -1,6 +1,11 @@
 package com.example.ainterak;
 
+import android.content.Context;
 import android.content.Intent;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
+import android.hardware.camera2.CameraAccessException;
+import android.hardware.camera2.CameraManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -46,6 +51,12 @@ public class MapsActivity extends FragmentActivity implements
     private MenuSlider menuSlider;
     private InfoWindow prevWindow = null;
 
+    private SensorManager mSensorManager;
+    private Sensor mAccelerometer;
+    private ShakeDetector mShakeDetector;
+
+    private boolean flashLightStatus = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme);
@@ -69,18 +80,44 @@ public class MapsActivity extends FragmentActivity implements
             e.printStackTrace();
         }
 
-        mLocationProvider.getLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
-            @Override
-            public void onSuccess(Location location) {
-                if (location == null) {
-                    Log.d("locationD", "Location was null");
-                    return;
+        mLocationProvider.getLocation().addOnSuccessListener(this, location -> {
+            if (location == null) {
+                Log.d("locationD", "Location was null");
+                return;
+            }
+            Log.d("locationD", location.getLongitude() + " latitude " + location.getLatitude());
+        });
+
+        initShake();
+    }
+
+    private void initShake(){
+        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        mAccelerometer = mSensorManager
+                .getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        mShakeDetector = new ShakeDetector();
+        mShakeDetector.setOnShakeListener(count -> {
+            if (count >= 3) {
+                try {
+                    toggleTorch();
+                } catch (CameraAccessException e) {
+                    Log.d("toggleD", "Torch not available");
                 }
-                Log.d("locationD", location.getLongitude() + " latitude " + location.getLatitude());
             }
         });
     }
 
+    private void toggleTorch() throws CameraAccessException{
+        CameraManager cameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
+        String cameraId = cameraManager.getCameraIdList()[0];
+        if (flashLightStatus){
+            cameraManager.setTorchMode(cameraId, false);
+            flashLightStatus = false;
+        } else {
+            cameraManager.setTorchMode(cameraId, true);
+            flashLightStatus = true;
+        }
+    }
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
@@ -109,6 +146,20 @@ public class MapsActivity extends FragmentActivity implements
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        // Add the following line to register the Session Manager Listener onResume
+        mSensorManager.registerListener(mShakeDetector, mAccelerometer,	SensorManager.SENSOR_DELAY_UI);
+    }
+
+    @Override
+    public void onPause() {
+        // Add the following line to unregister the Sensor Manager onPause
+        mSensorManager.unregisterListener(mShakeDetector);
+        super.onPause();
+    }
+
+    @Override
     public boolean onMyLocationButtonClick() {
         mLocationProvider.getLocation().addOnSuccessListener(this, (Location location) -> {
             if (location == null) return;
@@ -124,6 +175,13 @@ public class MapsActivity extends FragmentActivity implements
 
     public void openAddMarker(View view) {
         Intent intent = new Intent(this, AddMarkerActivity.class);
+        if (flashLightStatus){
+            try {
+                toggleTorch();
+            } catch (CameraAccessException e) {
+                e.printStackTrace();
+            }
+        }
         startActivity(intent);
     }
 
