@@ -65,7 +65,7 @@ public class AddMarkerActivity extends FragmentActivity implements
         finish();
     }
 
-    public void cancelConfirmation(View view) {
+    public void cancelBtnClick(View view) {
         cancelConfirmation();
     }
 
