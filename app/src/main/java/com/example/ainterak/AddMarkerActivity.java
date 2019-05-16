@@ -1,10 +1,12 @@
 package com.example.ainterak;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -43,17 +45,6 @@ public class AddMarkerActivity extends FragmentActivity implements
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        mLocationProvider.getLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
-            @Override
-            public void onSuccess(Location location) {
-                if (location == null) {
-                    Log.d("locationD", "Location was null");
-                    return;
-                }
-                Log.d("locationD", location.getLongitude() + " latitude " + location.getLatitude());
-            }
-        });
     }
 
     public void saveMarker(View view) {
@@ -72,8 +63,37 @@ public class AddMarkerActivity extends FragmentActivity implements
         finish();
     }
 
-    public void cancel(View view) {
-        finish();
+    public void cancelBtnClick(View view) {
+        cancelConfirmation();
+    }
+
+    @Override
+    public void onBackPressed() {
+        cancelConfirmation();
+    }
+
+    /**
+     * Handle confirmation of discarding the buske.
+     */
+    private void cancelConfirmation() {
+        TextView name = findViewById(R.id.marker_name_field);
+        EditText description = findViewById(R.id.description_box);
+
+        // If name and description are not filled, no point to ask for confirmation. No data will
+        // be lost
+        if (name.getText().toString().isEmpty() && description.getText().toString().isEmpty()) {
+            finish();
+            return;
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.add_buske__cancel_title)
+                .setMessage(R.string.add_buske__cancel_description)
+                .setPositiveButton(R.string.yes, (DialogInterface dialog, int which) -> finish())
+                .setNegativeButton(R.string.no, (DialogInterface dialog, int which) -> {
+                });
+
+        builder.show();
     }
 
     @Override
