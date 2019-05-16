@@ -1,10 +1,13 @@
 package com.example.ainterak;
 
+import android.arch.lifecycle.LiveData;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -16,9 +19,11 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class MapsActivity extends FragmentActivity implements
@@ -30,6 +35,7 @@ public class MapsActivity extends FragmentActivity implements
     private LocationProvider mLocationProvider;
     View mapView;
     private BuskeRepository buskeRepository;
+    private HashMap<Marker, Buske> markerToBuskeMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +90,8 @@ public class MapsActivity extends FragmentActivity implements
         ((ImageView) findViewById(R.id.myLocation)).setOnClickListener((View view) -> {
             onMyLocationButtonClick();
         });
-
+        InfoWindowAdapter infoWindowAdapter = new InfoWindowAdapter(this);
+        googleMap.setInfoWindowAdapter(infoWindowAdapter);
         addBuskarToMap();
     }
 
@@ -116,6 +123,7 @@ public class MapsActivity extends FragmentActivity implements
             if (buskar == null) {
                 return;
             }
+            markerToBuskeMap = new HashMap<>();
 
             // If there are no saved bushes, center map to current location of user
             if (buskar.isEmpty()) {
@@ -133,11 +141,12 @@ public class MapsActivity extends FragmentActivity implements
             LatLngBounds.Builder latLngBuilder = new LatLngBounds.Builder();
             for (Buske buske : buskar) {
                 LatLng latLng = new LatLng(buske.latitude, buske.longitude);
-                mMap.addMarker(new MarkerOptions()
+                Marker marker = mMap.addMarker(new MarkerOptions()
                         .position(latLng)
                         .title(buske.name)
                         .icon(BitmapDescriptorFactory.fromResource(R.drawable.buska_marker_140))
                 );
+                markerToBuskeMap.put(marker, buske);
                 latLngBuilder.include(latLng);
             }
 
@@ -160,5 +169,25 @@ public class MapsActivity extends FragmentActivity implements
                 mMap.moveCamera(CameraUpdateFactory.zoomTo(16));
             }
         });
+    }
+
+    public void delete(View view) {
+        Marker marker =
+    }
+
+    public void deleteBuske(Marker marker) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.buske_delete_title)
+                .setMessage(R.string.buske_delete_description)
+                .setPositiveButton(R.string.yes, (DialogInterface dialog, int which) -> buskeRepository.delete(markerToBuskeMap.get(marker)))
+                .setNegativeButton(R.string.no, (DialogInterface dialog, int which) -> {
+                });
+
+        builder.show();
+
+    }
+    public void openEditMarker(View view) {
+        Intent intent = new Intent(this, AddMarkerActivity.class);
+        startActivity(intent);
     }
 }
