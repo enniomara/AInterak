@@ -19,6 +19,7 @@ public class MenuSlider {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
+    static final float anchorPoint = 0.3f;
 
     private BuskeRepository buskeRepository;
 
@@ -30,7 +31,7 @@ public class MenuSlider {
     public void initSlider() {
         mLayout = (SlidingUpPanelLayout) activity.findViewById(R.id.sliding_layout);
         if (mLayout != null) {
-            mLayout.setAnchorPoint(0.3f); // slide up 30% then stop
+            mLayout.setAnchorPoint(anchorPoint); // slide up 30% then stop
             mLayout.setPanelState(SlidingUpPanelLayout.PanelState.ANCHORED);
             mLayout.setCoveredFadeColor(Color.argb(0,0,0,0));
         }
@@ -59,6 +60,14 @@ public class MenuSlider {
                 setNewDataset(names.toArray(new String[buskar.size()]));
             }
         });
+    }
+
+    /**
+     * Register a new listener.
+     * @param panelSlideListener
+     */
+    public void registerPanelSlideListener(SlidingUpPanelLayout.PanelSlideListener panelSlideListener) {
+        mLayout.addPanelSlideListener(panelSlideListener);
     }
 
     public void setNewDataset(String[] dataset) {
