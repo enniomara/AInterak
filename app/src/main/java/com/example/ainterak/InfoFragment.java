@@ -7,6 +7,7 @@ package com.example.ainterak;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Parcel;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -22,10 +23,10 @@ public class InfoFragment extends Fragment {
     private BuskeRepository buskeRepository = new BuskeRepository(getContext());
     private Buske buske;
 
-    public static InfoFragment newInstance(int id) {
+    public static InfoFragment newInstance(Buske buske) {
         InfoFragment infoFragment = new InfoFragment();
         Bundle args = new Bundle();
-        args.putInt("id", id);
+        args.putParcelable("buske", buske);
         infoFragment.setArguments(args);
         return infoFragment;
     }
@@ -35,16 +36,17 @@ public class InfoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,@Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.marker_info, container, false);
         Bundle bundle = this.getArguments();
-        int id = bundle.getInt("id");
-        buskeRepository.findAll().observe(this, (List<Buske> buskar) -> {
-            for (Buske buske: buskar) {
-                if(buske.id == id) {
-                    this.buske = buske;
+        this.buske = bundle.getParcelable("buske");
+//        int id = bundle.getInt("id");
+//        buskeRepository.findAll().observe(this, (List<Buske> buskar) -> {
+//            for (Buske buske: buskar) {
+//                if(buske.id == id) {
+//                    this.buske = buske;
                     TextView title = (TextView) view.findViewById(R.id.marker_text);
                     title.setText(buske.name);
-                }
-            }
-        });
+//                }
+//            }
+//        });
         return view;
     }
     @Override

@@ -211,7 +211,7 @@ public class MapsActivity extends FragmentActivity implements
                 .title(buske.name)
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.buska_marker_140))
         );
-        InfoFragment infoFragment = InfoFragment.newInstance(buske.id);
+        InfoFragment infoFragment = InfoFragment.newInstance(buske);
         InfoWindow infowindow = new InfoWindow(marker,OFFSET,infoFragment);
         infoWindowMap.put(marker, infowindow);
         latLngBuilder.include(latLng);
