@@ -37,16 +37,8 @@ public class InfoFragment extends Fragment {
         final View view = inflater.inflate(R.layout.marker_info, container, false);
         Bundle bundle = this.getArguments();
         this.buske = bundle.getParcelable("buske");
-//        int id = bundle.getInt("id");
-//        buskeRepository.findAll().observe(this, (List<Buske> buskar) -> {
-//            for (Buske buske: buskar) {
-//                if(buske.id == id) {
-//                    this.buske = buske;
                     TextView title = (TextView) view.findViewById(R.id.marker_text);
                     title.setText(buske.name);
-//                }
-//            }
-//        });
         return view;
     }
     @Override
@@ -63,9 +55,7 @@ public class InfoFragment extends Fragment {
                             buskeRepository.delete(buske);
                         }).setNegativeButton(R.string.no, (DialogInterface dialog, int which) -> {
                         });
-
                 builder.show();
-
             }
         };
         view.findViewById(R.id.marker_delete).setOnClickListener(onClickListenerDelete);

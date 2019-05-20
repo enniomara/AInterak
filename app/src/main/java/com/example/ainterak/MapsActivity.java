@@ -46,6 +46,7 @@ public class MapsActivity extends FragmentActivity implements
     private HashMap<Marker, InfoWindow> infoWindowMap;
     private InfoWindowManager infoWindowManager;
     private final InfoWindow.MarkerSpecification OFFSET = new InfoWindow.MarkerSpecification(0,100);
+    LatLngBounds.Builder latLngBuilder = new LatLngBounds.Builder();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +81,18 @@ public class MapsActivity extends FragmentActivity implements
                 Log.d("locationD", location.getLongitude() + " latitude " + location.getLatitude());
             }
         });
+        buskeRepository.findAll().observe(this, new Observer<List<Buske>>() {
+            @Override
+            public void onChanged(@Nullable List<Buske> buskes) {
+                infoWindowMap = new HashMap<>();
+                mMap.clear();
+                if (buskes != null) {
+                    for (Buske buske: buskes) {
+                        updateMarkers(buske);
+                    }
+                }
+            }
+        });
     }
 
     /**
@@ -103,7 +116,6 @@ public class MapsActivity extends FragmentActivity implements
             onMyLocationButtonClick();
         });
         addBuskarToMap();
-
     }
 
     @Override
@@ -130,18 +142,6 @@ public class MapsActivity extends FragmentActivity implements
      * user's location.
      */
     private void addBuskarToMap() {
-        buskeRepository.findAll().observe(this, new Observer<List<Buske>>() {
-            @Override
-            public void onChanged(@Nullable List<Buske> buskes) {
-                infoWindowMap = new HashMap<>();
-                mMap.clear();
-                if (buskes != null) {
-                    for (Buske buske: buskes) {
-                        updateMarkers(buske);
-                    }
-                }
-            }
-        });
         buskeRepository.findAll().observe(this, (List<Buske> buskar) -> {
             if (buskar == null) {
                 return;
@@ -160,7 +160,7 @@ public class MapsActivity extends FragmentActivity implements
             }
 
             // Populate latLngBounds with the different buskar
-            LatLngBounds.Builder latLngBuilder = new LatLngBounds.Builder();
+//            LatLngBounds.Builder latLngBuilder = new LatLngBounds.Builder();
             for (Buske buske : buskar) {
                 updateMarkers(buske);
             }
@@ -203,8 +203,6 @@ public class MapsActivity extends FragmentActivity implements
     }
 
     private void updateMarkers(Buske buske) {
-
-        LatLngBounds.Builder latLngBuilder = new LatLngBounds.Builder();
         LatLng latLng = new LatLng(buske.latitude, buske.longitude);
         Marker marker = mMap.addMarker(new MarkerOptions()
                 .position(latLng)
