@@ -35,7 +35,7 @@ public class CompassActivity extends FragmentActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_compass);
-        Buske buske = (Buske) getIntent().getParcelableExtra("test");
+        Buske buske = (Buske) getIntent().getParcelableExtra("com.example.ainterak.BUSKE");
         buskeLocation = new Location("");
         buskeLocation.setLongitude(buske.longitude);
         buskeLocation.setLatitude(buske.latitude);
