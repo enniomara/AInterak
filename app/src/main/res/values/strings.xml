@@ -15,4 +15,5 @@
     <string name="add_buske__cancel_description">By doing this, your buske will be removed.</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="buske_distance">The buske is %.2f m from your location</string>
 </resources>
