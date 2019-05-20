@@ -1,35 +1,31 @@
 package com.example.ainterak;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.location.Location;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 
 public class AddMarkerActivity extends FragmentActivity implements
         OnMapReadyCallback,
-        GoogleMap.OnMyLocationClickListener{
+        GoogleMap.OnMyLocationClickListener {
 
     private LocationProvider mLocationProvider;
     private GoogleMap mMap;
-    private FusedLocationProviderClient fusedLocationClient;
-    private Location markerLocation;
     private BuskeRepository buskeRepository;
 
     @Override
@@ -37,7 +33,6 @@ public class AddMarkerActivity extends FragmentActivity implements
         setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_marker);
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.marker_map);
@@ -50,35 +45,55 @@ public class AddMarkerActivity extends FragmentActivity implements
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        mLocationProvider.getLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
-            @Override
-            public void onSuccess(Location location) {
-                if (location == null) {
-                    Log.d("locationD", "Location was null");
-                    return;
-                }
-                Log.d("locationD", location.getLongitude() + " latitude " + location.getLatitude());
-            }
-        });
-
-
     }
 
     public void saveMarker(View view) {
         TextView name = findViewById(R.id.marker_name_field);
         EditText description = findViewById(R.id.description_box);
+
         Buske buske = new Buske();
         buske.name = name.getText().toString();
         buske.description = description.getText().toString();
-        buske.latitude = markerLocation.getLatitude();
-        buske.longitude = markerLocation.getLongitude();
+
+        LatLng latLng = mMap.getCameraPosition().target;
+        buske.latitude = latLng.latitude;
+        buske.longitude = latLng.longitude;
+
         buskeRepository.create(buske);
         finish();
     }
 
-    public void cancel(View view) {
-        finish();
+    public void cancelBtnClick(View view) {
+        cancelConfirmation();
+    }
+
+    @Override
+    public void onBackPressed() {
+        cancelConfirmation();
+    }
+
+    /**
+     * Handle confirmation of discarding the buske.
+     */
+    private void cancelConfirmation() {
+        TextView name = findViewById(R.id.marker_name_field);
+        EditText description = findViewById(R.id.description_box);
+
+        // If name and description are not filled, no point to ask for confirmation. No data will
+        // be lost
+        if (name.getText().toString().isEmpty() && description.getText().toString().isEmpty()) {
+            finish();
+            return;
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.add_buske__cancel_title)
+                .setMessage(R.string.add_buske__cancel_description)
+                .setPositiveButton(R.string.yes, (DialogInterface dialog, int which) -> finish())
+                .setNegativeButton(R.string.no, (DialogInterface dialog, int which) -> {
+                });
+
+        builder.show();
     }
 
     @Override
@@ -90,7 +105,7 @@ public class AddMarkerActivity extends FragmentActivity implements
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.setMyLocationEnabled(true);
-        mMap.getUiSettings().setMyLocationButtonEnabled(false);
+        mMap.getUiSettings().setMyLocationButtonEnabled(true);
 
         new java.util.Timer().schedule(new java.util.TimerTask() {
             @Override
@@ -101,22 +116,17 @@ public class AddMarkerActivity extends FragmentActivity implements
     }
 
     private void fixateCamera(LatLng latLng) {
-        mMap.addMarker(new MarkerOptions().position(latLng)
-                .title("Current Location")
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.buska_marker_140)));
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13));
         CameraPosition cp = new CameraPosition.Builder()
-                .target(latLng).zoom(17).build();
-        mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cp));
+                .target(latLng).zoom(18).build();
+        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cp));
     }
 
     private void getCurrentLocation() {
-        fusedLocationClient.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
+        mLocationProvider.getLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
             @Override
             public void onSuccess(Location location) {
-                if(location != null) {
-                    fixateCamera(new LatLng(location.getLatitude(),location.getLongitude()));
-                    markerLocation = location;
+                if (location != null) {
+                    fixateCamera(new LatLng(location.getLatitude(), location.getLongitude()));
                 }
             }
         });
