@@ -5,6 +5,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
@@ -12,6 +14,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.appolica.interactiveinfowindow.InfoWindow;
+import com.appolica.interactiveinfowindow.InfoWindowManager;
+import com.appolica.interactiveinfowindow.fragment.MapInfoWindowFragment;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -29,13 +34,19 @@ import java.util.List;
 public class MapsActivity extends FragmentActivity implements
         OnMapReadyCallback,
         GoogleMap.OnMyLocationClickListener,
-        GoogleMap.OnMyLocationButtonClickListener {
+        GoogleMap.OnMyLocationButtonClickListener,
+        GoogleMap.OnMarkerClickListener{
 
     private GoogleMap mMap;
     private LocationProvider mLocationProvider;
     View mapView;
     private BuskeRepository buskeRepository;
     private HashMap<Marker, Buske> markerToBuskeMap;
+//    private HashMap<Integer, Marker> markerMap;
+    private HashMap<Marker, InfoWindow> infoWindowMap;
+    private InfoWindowManager infoWindowManager;
+//    private MapInfoWindowFragment mapFragment;
+    private final InfoWindow.MarkerSpecification OFFSET = new InfoWindow.MarkerSpecification(0,100);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +55,11 @@ public class MapsActivity extends FragmentActivity implements
         setContentView(R.layout.activity_maps);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+//        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+//                .findFragmentById(R.id.map);
+        MapInfoWindowFragment mapFragment = (MapInfoWindowFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        infoWindowManager = mapFragment.infoWindowManager();
+//        final InfoWindow infoWindow = new InfoWindow()
         mapView = mapFragment.getView();
         mapFragment.getMapAsync(this);
 
@@ -84,14 +98,15 @@ public class MapsActivity extends FragmentActivity implements
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.setMyLocationEnabled(true);
+        mMap.setOnMarkerClickListener(MapsActivity.this);
 
         // There is a custom button that handles it
         mMap.getUiSettings().setMyLocationButtonEnabled(false);
         ((ImageView) findViewById(R.id.myLocation)).setOnClickListener((View view) -> {
             onMyLocationButtonClick();
         });
-        InfoWindowAdapter infoWindowAdapter = new InfoWindowAdapter(this);
-        googleMap.setInfoWindowAdapter(infoWindowAdapter);
+        //InfoWindowAdapter infoWindowAdapter = new InfoWindowAdapter(this);
+        //googleMap.setInfoWindowAdapter(infoWindowAdapter);
         addBuskarToMap();
     }
 
@@ -124,7 +139,8 @@ public class MapsActivity extends FragmentActivity implements
                 return;
             }
             markerToBuskeMap = new HashMap<>();
-
+//            markerMap = new HashMap<>();
+            infoWindowMap = new HashMap<>();
             // If there are no saved bushes, center map to current location of user
             if (buskar.isEmpty()) {
                 mLocationProvider.getLocation().addOnSuccessListener(this, (Location location) -> {
@@ -147,6 +163,10 @@ public class MapsActivity extends FragmentActivity implements
                         .icon(BitmapDescriptorFactory.fromResource(R.drawable.buska_marker_140))
                 );
                 markerToBuskeMap.put(marker, buske);
+//                markerMap.put(buske.id, marker);
+                InfoFragment infoFragment = InfoFragment.newInstance(buske.id);
+                InfoWindow infowindow = new InfoWindow(marker,OFFSET,infoFragment);
+                infoWindowMap.put(marker, infowindow);
                 latLngBuilder.include(latLng);
             }
 
@@ -171,9 +191,17 @@ public class MapsActivity extends FragmentActivity implements
         });
     }
 
-    public void delete(View view) {
-        Marker marker =
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        InfoWindow infoWindow = infoWindowMap.get(marker);
+
+        if (infoWindow != null) {
+            infoWindowManager.toggle(infoWindow, true);
+        }
+
+        return true;
     }
+
 
     public void deleteBuske(Marker marker) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
