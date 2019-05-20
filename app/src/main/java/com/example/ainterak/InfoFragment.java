@@ -15,9 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.google.android.gms.maps.model.Marker;
-
-import java.util.HashMap;
 import java.util.List;
 
 public class InfoFragment extends Fragment {
@@ -40,16 +37,14 @@ public class InfoFragment extends Fragment {
         Bundle bundle = this.getArguments();
         int id = bundle.getInt("id");
         buskeRepository.findAll().observe(this, (List<Buske> buskar) -> {
-//            buske = buskeRepository.findAll().getValue();
             for (Buske buske: buskar) {
                 if(buske.id == id) {
+                    this.buske = buske;
                     TextView title = (TextView) view.findViewById(R.id.marker_text);
                     title.setText(buske.name);
                 }
             }
-
         });
-
         return view;
     }
     @Override
@@ -62,8 +57,9 @@ public class InfoFragment extends Fragment {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 builder.setTitle(R.string.buske_delete_title)
                         .setMessage(R.string.buske_delete_description)
-                        .setPositiveButton(R.string.yes, (DialogInterface dialog, int which) -> buskeRepository.delete(buske))
-                        .setNegativeButton(R.string.no, (DialogInterface dialog, int which) -> {
+                        .setPositiveButton(R.string.yes, (DialogInterface dialog, int which) -> {
+                            buskeRepository.delete(buske);
+                        }).setNegativeButton(R.string.no, (DialogInterface dialog, int which) -> {
                         });
 
                 builder.show();
