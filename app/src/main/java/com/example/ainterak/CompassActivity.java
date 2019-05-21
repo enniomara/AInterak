@@ -49,11 +49,13 @@ public class CompassActivity extends FragmentActivity implements
 
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
-        float degree = 0;
         getCurrentLocation();
+        if (currentLocation == null){
+            return;
+        }
         // the difference between true north and magnetic north
         setGeoField();
-
+        float degree = 0;
         // Check if we are using the orientation sensor.
         if (sensors.length == 1) {
             if (sensorEvent.sensor.getType() == Sensor.TYPE_ORIENTATION) {
