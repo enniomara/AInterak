@@ -1,20 +1,19 @@
 package com.example.ainterak;
 
-import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.Transformation;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.appolica.interactiveinfowindow.InfoWindow;
 import com.appolica.interactiveinfowindow.InfoWindowManager;
@@ -29,6 +28,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.util.HashMap;
 import java.util.List;
@@ -47,6 +47,7 @@ public class MapsActivity extends FragmentActivity implements
     private InfoWindowManager infoWindowManager;
     private final InfoWindow.MarkerSpecification OFFSET = new InfoWindow.MarkerSpecification(0,100);
     LatLngBounds.Builder latLngBuilder = new LatLngBounds.Builder();
+    private MenuSlider menuSlider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,8 +63,8 @@ public class MapsActivity extends FragmentActivity implements
         mapFragment.getMapAsync(this);
 
         buskeRepository = new BuskeRepository(getApplicationContext());
-        MenuSlider menuSlider = new MenuSlider(this, buskeRepository);
-        menuSlider.initSlider();
+        menuSlider = new MenuSlider(this, buskeRepository);
+        initMenuSlider();
 
         try {
             mLocationProvider = new LocationProvider(this);
@@ -213,5 +214,60 @@ public class MapsActivity extends FragmentActivity implements
         InfoWindow infowindow = new InfoWindow(marker,OFFSET,infoFragment);
         infoWindowMap.put(marker, infowindow);
         latLngBuilder.include(latLng);
+    /**
+     * Initialize the menu slider and make changes to the activity so that it fits the menu slider
+     */
+    private void initMenuSlider() {
+        menuSlider.initSlider();
+
+        // Make floating action buttons appear over menu slider
+        RelativeLayout relativeLayout = findViewById(R.id.mapContainer);
+        LinearLayout layout = findViewById(R.id.buttonContainer);
+        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) layout.getLayoutParams();
+        // RelativeLayout's dimensions are not set before render. Defer until render (and dimensions are set)
+        // to modify margin
+        relativeLayout.post(() -> {
+            params.setMargins(
+                    params.leftMargin,
+                    params.topMargin,
+                    params.rightMargin,
+                    (int) (relativeLayout.getHeight() * MenuSlider.anchorPoint)
+            );
+            layout.setLayoutParams(params);
+        });
+
+        menuSlider.registerPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
+            @Override
+            public void onPanelSlide(View panel, float slideOffset) {
+                // Restrict the buttons to stay under the anchor-point
+                if (slideOffset > MenuSlider.anchorPoint) {
+                    return;
+                }
+
+                LinearLayout layout = findViewById(R.id.buttonContainer);
+                RelativeLayout relativeLayout = findViewById(R.id.mapContainer);
+                // Defer execution to the
+                Animation a = new Animation() {
+                    @Override
+                    protected void applyTransformation(float interpolatedTime, Transformation t) {
+                        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) layout.getLayoutParams();
+                        params.setMargins(
+                                params.leftMargin,
+                                params.topMargin,
+                                params.rightMargin,
+                                (int) (relativeLayout.getHeight() * slideOffset)
+                        );
+                        layout.setLayoutParams(params);
+                    }
+                };
+                a.setDuration(1);
+                layout.startAnimation(a);
+            }
+
+            @Override
+            public void onPanelStateChanged(View panel, SlidingUpPanelLayout.PanelState previousState, SlidingUpPanelLayout.PanelState newState) {
+            }
+        });
     }
+}
 }
