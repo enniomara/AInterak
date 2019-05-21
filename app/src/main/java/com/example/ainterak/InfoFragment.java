@@ -6,6 +6,7 @@ package com.example.ainterak;
  * **/
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.support.annotation.Nullable;
@@ -59,5 +60,14 @@ public class InfoFragment extends Fragment {
             }
         };
         view.findViewById(R.id.marker_delete).setOnClickListener(onClickListenerDelete);
+        final View.OnClickListener onClickListenerCompass = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), CompassActivity.class);
+                intent.putExtra("com.example.ainterak.BUSKE", buske);
+                startActivity(intent);
+            }
+        };
+        view.findViewById(R.id.marker_compass).setOnClickListener(onClickListenerCompass);
     }
 }
