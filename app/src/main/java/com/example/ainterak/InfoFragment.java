@@ -39,7 +39,9 @@ public class InfoFragment extends Fragment {
         Bundle bundle = this.getArguments();
         this.buske = bundle.getParcelable("buske");
                     TextView title = (TextView) view.findViewById(R.id.marker_text);
+                    TextView description = (TextView) view.findViewById(R.id.marker_description);
                     title.setText(buske.name);
+                    description.setText(buske.description);
         return view;
     }
     @Override

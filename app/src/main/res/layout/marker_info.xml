@@ -15,11 +15,16 @@
             android:id="@+id/marker_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:gravity="center"
             android:textAlignment="center"
-            app:layout_constraintTop_toTopOf="parent"
             tools:text="title" />
+        <TextView
+            android:id="@+id/marker_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textAlignment="center"
+            tools:text="description"/>
 
         <LinearLayout
             android:layout_width="match_parent"
