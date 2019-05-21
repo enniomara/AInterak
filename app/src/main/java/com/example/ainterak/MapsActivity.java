@@ -37,7 +37,7 @@ public class MapsActivity extends FragmentActivity implements
         OnMapReadyCallback,
         GoogleMap.OnMyLocationClickListener,
         GoogleMap.OnMyLocationButtonClickListener,
-        GoogleMap.OnMarkerClickListener{
+        GoogleMap.OnMarkerClickListener {
 
     private GoogleMap mMap;
     private LocationProvider mLocationProvider;
@@ -45,7 +45,7 @@ public class MapsActivity extends FragmentActivity implements
     private BuskeRepository buskeRepository;
     private HashMap<Marker, InfoWindow> infoWindowMap;
     private InfoWindowManager infoWindowManager;
-    private final InfoWindow.MarkerSpecification OFFSET = new InfoWindow.MarkerSpecification(0,100);
+    private final InfoWindow.MarkerSpecification OFFSET = new InfoWindow.MarkerSpecification(0, 100);
     LatLngBounds.Builder latLngBuilder = new LatLngBounds.Builder();
     private MenuSlider menuSlider;
 
@@ -88,7 +88,7 @@ public class MapsActivity extends FragmentActivity implements
                 infoWindowMap = new HashMap<>();
                 mMap.clear();
                 if (buskes != null) {
-                    for (Buske buske: buskes) {
+                    for (Buske buske : buskes) {
                         updateMarkers(buske);
                     }
                 }
@@ -211,63 +211,63 @@ public class MapsActivity extends FragmentActivity implements
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.buska_marker_140))
         );
         InfoFragment infoFragment = InfoFragment.newInstance(buske);
-        InfoWindow infowindow = new InfoWindow(marker,OFFSET,infoFragment);
+        InfoWindow infowindow = new InfoWindow(marker, OFFSET, infoFragment);
         infoWindowMap.put(marker, infowindow);
         latLngBuilder.include(latLng);
-    /**
-     * Initialize the menu slider and make changes to the activity so that it fits the menu slider
-     */
-    private void initMenuSlider() {
-        menuSlider.initSlider();
+    }
+        /**
+         * Initialize the menu slider and make changes to the activity so that it fits the menu slider
+         */
+        private void initMenuSlider () {
+            menuSlider.initSlider();
 
-        // Make floating action buttons appear over menu slider
-        RelativeLayout relativeLayout = findViewById(R.id.mapContainer);
-        LinearLayout layout = findViewById(R.id.buttonContainer);
-        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) layout.getLayoutParams();
-        // RelativeLayout's dimensions are not set before render. Defer until render (and dimensions are set)
-        // to modify margin
-        relativeLayout.post(() -> {
-            params.setMargins(
-                    params.leftMargin,
-                    params.topMargin,
-                    params.rightMargin,
-                    (int) (relativeLayout.getHeight() * MenuSlider.anchorPoint)
-            );
-            layout.setLayoutParams(params);
-        });
+            // Make floating action buttons appear over menu slider
+            RelativeLayout relativeLayout = findViewById(R.id.mapContainer);
+            LinearLayout layout = findViewById(R.id.buttonContainer);
+            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) layout.getLayoutParams();
+            // RelativeLayout's dimensions are not set before render. Defer until render (and dimensions are set)
+            // to modify margin
+            relativeLayout.post(() -> {
+                params.setMargins(
+                        params.leftMargin,
+                        params.topMargin,
+                        params.rightMargin,
+                        (int) (relativeLayout.getHeight() * MenuSlider.anchorPoint)
+                );
+                layout.setLayoutParams(params);
+            });
 
-        menuSlider.registerPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
-            @Override
-            public void onPanelSlide(View panel, float slideOffset) {
-                // Restrict the buttons to stay under the anchor-point
-                if (slideOffset > MenuSlider.anchorPoint) {
-                    return;
+            menuSlider.registerPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
+                @Override
+                public void onPanelSlide(View panel, float slideOffset) {
+                    // Restrict the buttons to stay under the anchor-point
+                    if (slideOffset > MenuSlider.anchorPoint) {
+                        return;
+                    }
+
+                    LinearLayout layout = findViewById(R.id.buttonContainer);
+                    RelativeLayout relativeLayout = findViewById(R.id.mapContainer);
+                    // Defer execution to the
+                    Animation a = new Animation() {
+                        @Override
+                        protected void applyTransformation(float interpolatedTime, Transformation t) {
+                            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) layout.getLayoutParams();
+                            params.setMargins(
+                                    params.leftMargin,
+                                    params.topMargin,
+                                    params.rightMargin,
+                                    (int) (relativeLayout.getHeight() * slideOffset)
+                            );
+                            layout.setLayoutParams(params);
+                        }
+                    };
+                    a.setDuration(1);
+                    layout.startAnimation(a);
                 }
 
-                LinearLayout layout = findViewById(R.id.buttonContainer);
-                RelativeLayout relativeLayout = findViewById(R.id.mapContainer);
-                // Defer execution to the
-                Animation a = new Animation() {
-                    @Override
-                    protected void applyTransformation(float interpolatedTime, Transformation t) {
-                        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) layout.getLayoutParams();
-                        params.setMargins(
-                                params.leftMargin,
-                                params.topMargin,
-                                params.rightMargin,
-                                (int) (relativeLayout.getHeight() * slideOffset)
-                        );
-                        layout.setLayoutParams(params);
-                    }
-                };
-                a.setDuration(1);
-                layout.startAnimation(a);
-            }
-
-            @Override
-            public void onPanelStateChanged(View panel, SlidingUpPanelLayout.PanelState previousState, SlidingUpPanelLayout.PanelState newState) {
-            }
-        });
+                @Override
+                public void onPanelStateChanged(View panel, SlidingUpPanelLayout.PanelState previousState, SlidingUpPanelLayout.PanelState newState) {
+                }
+            });
+        }
     }
-}
-}
