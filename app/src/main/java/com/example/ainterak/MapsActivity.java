@@ -21,7 +21,6 @@ import com.appolica.interactiveinfowindow.fragment.MapInfoWindowFragment;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -46,8 +45,8 @@ public class MapsActivity extends FragmentActivity implements
     private HashMap<Marker, InfoWindow> infoWindowMap;
     private InfoWindowManager infoWindowManager;
     private final InfoWindow.MarkerSpecification OFFSET = new InfoWindow.MarkerSpecification(0, 100);
-    LatLngBounds.Builder latLngBuilder = new LatLngBounds.Builder();
     private MenuSlider menuSlider;
+    private InfoWindow prevWindow = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,12 +84,12 @@ public class MapsActivity extends FragmentActivity implements
         buskeRepository.findAll().observe(this, new Observer<List<Buske>>() {
             @Override
             public void onChanged(@Nullable List<Buske> buskes) {
-                infoWindowMap = new HashMap<>();
                 mMap.clear();
+                if(prevWindow != null) {
+                    infoWindowManager.toggle(prevWindow);
+                }
                 if (buskes != null) {
-                    for (Buske buske : buskes) {
-                        updateMarkers(buske);
-                    }
+                    addBuskarToMap();
                 }
             }
         });
@@ -116,7 +115,7 @@ public class MapsActivity extends FragmentActivity implements
         ((ImageView) findViewById(R.id.myLocation)).setOnClickListener((View view) -> {
             onMyLocationButtonClick();
         });
-        addBuskarToMap();
+//        addBuskarToMap();
     }
 
     @Override
@@ -161,9 +160,18 @@ public class MapsActivity extends FragmentActivity implements
             }
 
             // Populate latLngBounds with the different buskar
-//            LatLngBounds.Builder latLngBuilder = new LatLngBounds.Builder();
+            LatLngBounds.Builder latLngBuilder = new LatLngBounds.Builder();
             for (Buske buske : buskar) {
-                updateMarkers(buske);
+                LatLng latLng = new LatLng(buske.latitude, buske.longitude);
+                Marker marker = mMap.addMarker(new MarkerOptions()
+                        .position(latLng)
+                        .title(buske.name)
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.buska_marker_140))
+                );
+                InfoFragment infoFragment = InfoFragment.newInstance(buske);
+                InfoWindow infowindow = new InfoWindow(marker, OFFSET, infoFragment);
+                infoWindowMap.put(marker, infowindow);
+                latLngBuilder.include(latLng);
             }
 
             int width = getResources().getDisplayMetrics().widthPixels;
@@ -190,7 +198,7 @@ public class MapsActivity extends FragmentActivity implements
     @Override
     public boolean onMarkerClick(Marker marker) {
         InfoWindow infoWindow = infoWindowMap.get(marker);
-
+        prevWindow = infoWindow;
         if (infoWindow != null) {
             infoWindowManager.toggle(infoWindow, true);
         }
@@ -204,70 +212,61 @@ public class MapsActivity extends FragmentActivity implements
     }
 
     private void updateMarkers(Buske buske) {
-        LatLng latLng = new LatLng(buske.latitude, buske.longitude);
-        Marker marker = mMap.addMarker(new MarkerOptions()
-                .position(latLng)
-                .title(buske.name)
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.buska_marker_140))
-        );
-        InfoFragment infoFragment = InfoFragment.newInstance(buske);
-        InfoWindow infowindow = new InfoWindow(marker, OFFSET, infoFragment);
-        infoWindowMap.put(marker, infowindow);
-        latLngBuilder.include(latLng);
+
     }
         /**
          * Initialize the menu slider and make changes to the activity so that it fits the menu slider
          */
-        private void initMenuSlider () {
-            menuSlider.initSlider();
+    private void initMenuSlider () {
+        menuSlider.initSlider();
 
-            // Make floating action buttons appear over menu slider
-            RelativeLayout relativeLayout = findViewById(R.id.mapContainer);
-            LinearLayout layout = findViewById(R.id.buttonContainer);
-            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) layout.getLayoutParams();
-            // RelativeLayout's dimensions are not set before render. Defer until render (and dimensions are set)
-            // to modify margin
-            relativeLayout.post(() -> {
-                params.setMargins(
-                        params.leftMargin,
-                        params.topMargin,
-                        params.rightMargin,
-                        (int) (relativeLayout.getHeight() * MenuSlider.anchorPoint)
-                );
-                layout.setLayoutParams(params);
-            });
+        // Make floating action buttons appear over menu slider
+        RelativeLayout relativeLayout = findViewById(R.id.mapContainer);
+        LinearLayout layout = findViewById(R.id.buttonContainer);
+        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) layout.getLayoutParams();
+        // RelativeLayout's dimensions are not set before render. Defer until render (and dimensions are set)
+        // to modify margin
+        relativeLayout.post(() -> {
+            params.setMargins(
+                    params.leftMargin,
+                    params.topMargin,
+                    params.rightMargin,
+                    (int) (relativeLayout.getHeight() * MenuSlider.anchorPoint)
+            );
+            layout.setLayoutParams(params);
+        });
 
-            menuSlider.registerPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
-                @Override
-                public void onPanelSlide(View panel, float slideOffset) {
-                    // Restrict the buttons to stay under the anchor-point
-                    if (slideOffset > MenuSlider.anchorPoint) {
-                        return;
+        menuSlider.registerPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
+            @Override
+            public void onPanelSlide(View panel, float slideOffset) {
+                // Restrict the buttons to stay under the anchor-point
+                if (slideOffset > MenuSlider.anchorPoint) {
+                    return;
+                }
+
+                LinearLayout layout = findViewById(R.id.buttonContainer);
+                RelativeLayout relativeLayout = findViewById(R.id.mapContainer);
+                // Defer execution to the
+                Animation a = new Animation() {
+                    @Override
+                    protected void applyTransformation(float interpolatedTime, Transformation t) {
+                        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) layout.getLayoutParams();
+                        params.setMargins(
+                                params.leftMargin,
+                                params.topMargin,
+                                params.rightMargin,
+                                (int) (relativeLayout.getHeight() * slideOffset)
+                        );
+                        layout.setLayoutParams(params);
                     }
+                };
+                a.setDuration(1);
+                layout.startAnimation(a);
+            }
 
-                    LinearLayout layout = findViewById(R.id.buttonContainer);
-                    RelativeLayout relativeLayout = findViewById(R.id.mapContainer);
-                    // Defer execution to the
-                    Animation a = new Animation() {
-                        @Override
-                        protected void applyTransformation(float interpolatedTime, Transformation t) {
-                            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) layout.getLayoutParams();
-                            params.setMargins(
-                                    params.leftMargin,
-                                    params.topMargin,
-                                    params.rightMargin,
-                                    (int) (relativeLayout.getHeight() * slideOffset)
-                            );
-                            layout.setLayoutParams(params);
-                        }
-                    };
-                    a.setDuration(1);
-                    layout.startAnimation(a);
-                }
-
-                @Override
-                public void onPanelStateChanged(View panel, SlidingUpPanelLayout.PanelState previousState, SlidingUpPanelLayout.PanelState newState) {
-                }
-            });
-        }
+            @Override
+            public void onPanelStateChanged(View panel, SlidingUpPanelLayout.PanelState previousState, SlidingUpPanelLayout.PanelState newState) {
+            }
+        });
     }
+}
