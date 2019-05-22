@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -60,6 +61,7 @@ public class AddMarkerActivity extends FragmentActivity implements
         buske.longitude = latLng.longitude;
 
         buskeRepository.create(buske);
+        Toast.makeText(this, "Buske created", Toast.LENGTH_SHORT).show();
         finish();
     }
 

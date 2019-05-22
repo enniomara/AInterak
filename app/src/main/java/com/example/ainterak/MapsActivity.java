@@ -81,18 +81,6 @@ public class MapsActivity extends FragmentActivity implements
                 Log.d("locationD", location.getLongitude() + " latitude " + location.getLatitude());
             }
         });
-        buskeRepository.findAll().observe(this, new Observer<List<Buske>>() {
-            @Override
-            public void onChanged(@Nullable List<Buske> buskes) {
-                mMap.clear();
-                if(prevWindow != null) {
-                    infoWindowManager.toggle(prevWindow);
-                }
-                if (buskes != null) {
-                    addBuskarToMap();
-                }
-            }
-        });
     }
 
     /**
@@ -115,7 +103,18 @@ public class MapsActivity extends FragmentActivity implements
         ((ImageView) findViewById(R.id.myLocation)).setOnClickListener((View view) -> {
             onMyLocationButtonClick();
         });
-//        addBuskarToMap();
+        buskeRepository.findAll().observe(this, new Observer<List<Buske>>() {
+            @Override
+            public void onChanged(@Nullable List<Buske> buskes) {
+                mMap.clear();
+                if(prevWindow != null) {
+                    infoWindowManager.toggle(prevWindow);
+                }
+                if (buskes != null) {
+                    addBuskarToMap();
+                }
+            }
+        });
     }
 
     @Override
@@ -211,9 +210,6 @@ public class MapsActivity extends FragmentActivity implements
         startActivity(intent);
     }
 
-    private void updateMarkers(Buske buske) {
-
-    }
         /**
          * Initialize the menu slider and make changes to the activity so that it fits the menu slider
          */
