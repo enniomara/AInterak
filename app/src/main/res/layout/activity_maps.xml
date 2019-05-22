@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<com.sothree.slidinguppanel.SlidingUpPanelLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.sothree.slidinguppanel.SlidingUpPanelLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:sothree="http://schemas.android.com/apk/res-auto"
     android:id="@+id/sliding_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="bottom"
     sothree:umanoPanelHeight="68dp"
-    sothree:umanoShadowHeight="2dp"
-    >
+    sothree:umanoShadowHeight="2dp">
     <!--sothree:umanoScrollableView="@id/menu_list"-->
+
     <RelativeLayout
         android:id="@+id/mapContainer"
         android:layout_width="match_parent"
@@ -30,9 +29,9 @@
             android:id="@+id/buttonContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="bottom|end"
             android:clipChildren="false"
             android:clipToPadding="false"
+            android:gravity="bottom|end"
             android:orientation="vertical">
 
             <LinearLayout
@@ -70,11 +69,16 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/myBushes"
             android:layout_width="match_parent"
-            android:layout_height="60sp"
-            android:gravity="center|top"
-            android:text="\u268A"
-            android:textSize="16sp" />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="10dp"
+            android:drawableTop="@drawable/ic_remove_black_24dp"
+            android:text="@string/my_bushes_slider"
+            android:textAlignment="center"
+            android:textSize="24sp"
+            android:textStyle="bold" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/menu_list"

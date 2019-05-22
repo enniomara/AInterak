@@ -6,6 +6,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.SupportActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.TextView;
 
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
@@ -33,7 +35,7 @@ public class MenuSlider {
         if (mLayout != null) {
             mLayout.setAnchorPoint(anchorPoint); // slide up 30% then stop
             mLayout.setPanelState(SlidingUpPanelLayout.PanelState.ANCHORED);
-            mLayout.setCoveredFadeColor(Color.argb(0,0,0,0));
+            mLayout.setCoveredFadeColor(Color.argb(0, 0, 0, 0));
         }
         recyclerView = (RecyclerView) activity.findViewById(R.id.menu_list);
 
@@ -44,6 +46,31 @@ public class MenuSlider {
         // use a linear layout manager
         layoutManager = new LinearLayoutManager(activity);
         recyclerView.setLayoutManager(layoutManager);
+
+        // Register slider that changes drag icon from arrow to bar-shaped depending on panel offset
+        this.registerPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
+            @Override
+            public void onPanelSlide(View panel, float slideOffset) {
+                TextView textView = activity.findViewById(R.id.myBushes);
+                if (slideOffset != 0) {
+                    textView.setCompoundDrawablesWithIntrinsicBounds(
+                            0,
+                            R.drawable.ic_remove_black_24dp,
+                            0,
+                            0);
+                } else {
+                    textView.setCompoundDrawablesWithIntrinsicBounds(0,
+                            R.drawable.ic_keyboard_arrow_up_black_24dp,
+                            0,
+                            0);
+                }
+            }
+
+            @Override
+            public void onPanelStateChanged(View panel, SlidingUpPanelLayout.PanelState previousState, SlidingUpPanelLayout.PanelState newState) {
+
+            }
+        });
 
         buskeRepository.findAll().observe(activity, new Observer<List<Buske>>() {
             @Override
@@ -64,6 +91,7 @@ public class MenuSlider {
 
     /**
      * Register a new listener.
+     *
      * @param panelSlideListener
      */
     public void registerPanelSlideListener(SlidingUpPanelLayout.PanelSlideListener panelSlideListener) {
