@@ -198,9 +198,20 @@ public class MapsActivity extends FragmentActivity implements
     public boolean onMarkerClick(Marker marker) {
         InfoWindow infoWindow = infoWindowMap.get(marker);
         prevWindow = infoWindow;
-        if (infoWindow != null) {
-            infoWindowManager.toggle(infoWindow, true);
-        }
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(),mMap.getCameraPosition().zoom), 1000, new GoogleMap.CancelableCallback() {
+            @Override
+            public void onFinish() {
+                if (infoWindow != null) {
+                    infoWindowManager.toggle(infoWindow, true);
+                }
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+        });
+
 
         return true;
     }
