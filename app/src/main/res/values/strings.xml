@@ -16,4 +16,5 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="buske_distance">The buske is %.2f m from your location</string>
+    <string name="my_bushes_slider">Mina Buskar</string>
 </resources>
