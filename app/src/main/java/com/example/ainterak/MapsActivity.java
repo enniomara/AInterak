@@ -1,11 +1,9 @@
 package com.example.ainterak;
 
-import android.arch.lifecycle.Observer;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
@@ -139,7 +137,7 @@ public class MapsActivity extends FragmentActivity implements
                 return;
             }
             mMap.clear();
-            if(prevWindow != null) {
+            if (prevWindow != null) {
                 infoWindowManager.toggle(prevWindow);
             }
             infoWindowMap = new HashMap<>();
@@ -197,7 +195,7 @@ public class MapsActivity extends FragmentActivity implements
         InfoWindow infoWindow = infoWindowMap.get(marker);
         prevWindow = infoWindow;
         mMap.animateCamera(CameraUpdateFactory
-                .newLatLngZoom(marker.getPosition(),mMap.getCameraPosition().zoom), 200, new GoogleMap.CancelableCallback() {
+                .newLatLngZoom(marker.getPosition(), mMap.getCameraPosition().zoom), 200, new GoogleMap.CancelableCallback() {
             @Override
             public void onFinish() {
                 if (infoWindow != null) {
@@ -210,7 +208,7 @@ public class MapsActivity extends FragmentActivity implements
 
             }
         });
-                return true;
+        return true;
     }
 
     public void openEditMarker(View view) {
@@ -218,10 +216,10 @@ public class MapsActivity extends FragmentActivity implements
         startActivity(intent);
     }
 
-        /**
-         * Initialize the menu slider and make changes to the activity so that it fits the menu slider
-         */
-    private void initMenuSlider () {
+    /**
+     * Initialize the menu slider and make changes to the activity so that it fits the menu slider
+     */
+    private void initMenuSlider() {
         menuSlider.initSlider();
 
         // Make floating action buttons appear over menu slider

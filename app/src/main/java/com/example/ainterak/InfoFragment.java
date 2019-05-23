@@ -3,7 +3,7 @@ package com.example.ainterak;
 /**
  * Code from https://github.com/Appolica/InteractiveInfoWindowAndroid/blob/master/InteractiveInfoWindowAndroid/sample/src/main/java/com/appolica/sample/fragments/FormFragment.java
  * Modified
- * **/
+ **/
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -35,16 +35,17 @@ public class InfoFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,@Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.marker_info, container, false);
         Bundle bundle = this.getArguments();
         this.buske = bundle.getParcelable("buske");
-                TextView title = (TextView) view.findViewById(R.id.marker_text);
-                TextView description = (TextView) view.findViewById(R.id.marker_description);
-                title.setText(buske.name);
-                description.setText(buske.description);
+        TextView title = (TextView) view.findViewById(R.id.marker_text);
+        TextView description = (TextView) view.findViewById(R.id.marker_description);
+        title.setText(buske.name);
+        description.setText(buske.description);
         return view;
     }
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -54,12 +55,13 @@ public class InfoFragment extends Fragment {
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 builder.setTitle(R.string.buske_delete_title)
-                    .setMessage(R.string.buske_delete_description)
-                    .setPositiveButton(R.string.yes, (DialogInterface dialog, int which) -> {
-                        buskeRepository.delete(buske);
-                        Toast.makeText(getContext(), "Buske removed", Toast.LENGTH_SHORT).show();
-                    }).setNegativeButton(R.string.no, (DialogInterface dialog, int which) -> {
-                    });
+                        .setMessage(R.string.buske_delete_description)
+                        .setPositiveButton(R.string.yes, (DialogInterface dialog, int which) -> {
+                            buskeRepository.delete(buske);
+                            Toast.makeText(getContext(), "Buske removed", Toast.LENGTH_SHORT).show();
+                        })
+                        .setNegativeButton(R.string.no, (DialogInterface dialog, int which) -> {
+                        });
                 builder.show();
             }
         };
