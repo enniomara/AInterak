@@ -193,7 +193,7 @@ public class MapsActivity extends FragmentActivity implements
         InfoWindow infoWindow = infoWindowMap.get(marker);
         prevWindow = infoWindow;
         mMap.animateCamera(CameraUpdateFactory
-                .newLatLngZoom(marker.getPosition(),mMap.getCameraPosition().zoom), 1000, new GoogleMap.CancelableCallback() {
+                .newLatLngZoom(marker.getPosition(),mMap.getCameraPosition().zoom), 200, new GoogleMap.CancelableCallback() {
             @Override
             public void onFinish() {
                 if (infoWindow != null) {
