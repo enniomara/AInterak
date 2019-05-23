@@ -78,7 +78,10 @@ public class InfoFragment extends Fragment {
         final View.OnClickListener onClickListenerEdit = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(), "We have currently not implemented edit functionality.", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getActivity(), EditMarkerActivity.class);
+                intent.putExtra("com.example.ainterak.BUSKE", buske);
+                startActivity(intent);
+//                Toast.makeText(getContext(), "We have currently not implemented edit functionality.", Toast.LENGTH_SHORT).show();
             }
         };
         view.findViewById(R.id.marker_edit).setOnClickListener(onClickListenerEdit);

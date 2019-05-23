@@ -9,6 +9,7 @@
     <string name="permission_denied">Permission Denied</string>
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
+    <string name="edit">Edit</string>
     <string name="description">Description:</string>
     <string name="name">Name:</string>
     <string name="add_buske__cancel_title">Do you want to discard your buske?</string>
@@ -19,4 +20,6 @@
     <string name="buske_delete_description">By doing this, your buske will be removed.</string>
     <string name="buske_distance">The buske is %.2f m from your location</string>
     <string name="my_bushes_slider">Mina Buskar</string>
+    <string name="edit_buske_cancel_title">Do you want to cancel the changes to your buske?</string>
+    <string name="edit_buske_cancel_description">By doing this, no changes will be made to your buske.</string>
 </resources>
