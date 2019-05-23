@@ -74,4 +74,11 @@ public class MenuSlider {
         mAdapter = new MyAdapter(dataset);
         recyclerView.setAdapter(mAdapter);
     }
+
+    /**
+     * Set the slider's panel state to collapsed.
+     */
+    public void collapseSlider() {
+        mLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+    }
 }

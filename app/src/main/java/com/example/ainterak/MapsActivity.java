@@ -91,6 +91,9 @@ public class MapsActivity extends FragmentActivity implements
             onMyLocationButtonClick();
         });
 
+        // Collapse the menuSlider if a click on the map is registered
+        mMap.setOnMapClickListener(v -> menuSlider.collapseSlider());
+
         addBuskarToMap();
     }
 
