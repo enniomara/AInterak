@@ -23,6 +23,16 @@ public class BuskeRepository {
         }.execute();
     }
 
+    public void delete(final Buske buske) {
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                appDatabase.buskeDao().deleteBuske(buske);
+                return null;
+            }
+        }.execute();
+    }
+
     public LiveData<List<Buske>> findAll() {
         return appDatabase.buskeDao().getAll();
     }
