@@ -103,18 +103,7 @@ public class MapsActivity extends FragmentActivity implements
         ((ImageView) findViewById(R.id.myLocation)).setOnClickListener((View view) -> {
             onMyLocationButtonClick();
         });
-        buskeRepository.findAll().observe(this, new Observer<List<Buske>>() {
-            @Override
-            public void onChanged(@Nullable List<Buske> buskes) {
-                mMap.clear();
-                if(prevWindow != null) {
-                    infoWindowManager.toggle(prevWindow);
-                }
-                if (buskes != null) {
-                    addBuskarToMap();
-                }
-            }
-        });
+        addBuskarToMap();
     }
 
     @Override
@@ -144,6 +133,10 @@ public class MapsActivity extends FragmentActivity implements
         buskeRepository.findAll().observe(this, (List<Buske> buskar) -> {
             if (buskar == null) {
                 return;
+            }
+            mMap.clear();
+            if(prevWindow != null) {
+                infoWindowManager.toggle(prevWindow);
             }
             infoWindowMap = new HashMap<>();
             // If there are no saved bushes, center map to current location of user
@@ -192,13 +185,15 @@ public class MapsActivity extends FragmentActivity implements
                 mMap.moveCamera(CameraUpdateFactory.zoomTo(16));
             }
         });
+
     }
 
     @Override
     public boolean onMarkerClick(Marker marker) {
         InfoWindow infoWindow = infoWindowMap.get(marker);
         prevWindow = infoWindow;
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(),mMap.getCameraPosition().zoom), 1000, new GoogleMap.CancelableCallback() {
+        mMap.animateCamera(CameraUpdateFactory
+                .newLatLngZoom(marker.getPosition(),mMap.getCameraPosition().zoom), 1000, new GoogleMap.CancelableCallback() {
             @Override
             public void onFinish() {
                 if (infoWindow != null) {
@@ -211,9 +206,7 @@ public class MapsActivity extends FragmentActivity implements
 
             }
         });
-
-
-        return true;
+                return true;
     }
 
     public void openEditMarker(View view) {
