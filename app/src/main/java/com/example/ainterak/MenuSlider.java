@@ -79,12 +79,7 @@ public class MenuSlider {
                     return;
                 }
 
-                ArrayList<String> names = new ArrayList<>();
-                for (Buske buske : buskar) {
-                    names.add(buske.name);
-                }
-
-                setNewDataset(names.toArray(new String[buskar.size()]));
+                setNewDataset(buskar.toArray(new Buske[0]));
             }
         });
     }
@@ -98,8 +93,8 @@ public class MenuSlider {
         mLayout.addPanelSlideListener(panelSlideListener);
     }
 
-    public void setNewDataset(String[] dataset) {
-        mAdapter = new MyAdapter(dataset);
+    public void setNewDataset(Buske[] dataset) {
+        mAdapter = new BuskeAdapter(dataset);
         recyclerView.setAdapter(mAdapter);
     }
 
