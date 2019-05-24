@@ -50,7 +50,7 @@ public class CompassActivity extends FragmentActivity implements
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
         getCurrentLocation();
-        if (currentLocation == null){
+        if (currentLocation == null) {
             return;
         }
         // the difference between true north and magnetic north
@@ -65,12 +65,17 @@ public class CompassActivity extends FragmentActivity implements
         }
 
         //adjust the degree with the declination
-        degree += geoField.getDeclination();
+        degree -= geoField.getDeclination();
 
         // the bearing from your location to the destination location. This is in degrees east of true north.
         float bearing = currentLocation.bearingTo(buskeLocation);
         // offset the direction in which the phone is facing (degree) from the buske destination rather than true north
-        degree = bearing - (bearing + degree);
+        if (bearing < 0) {
+            bearing += 360;
+        }
+
+        degree = bearing - degree;
+
         // convert from degrees east of true north (-180 to +180) into normal degrees (0 to 360)
         degree = normalizeDegree(degree);
 
