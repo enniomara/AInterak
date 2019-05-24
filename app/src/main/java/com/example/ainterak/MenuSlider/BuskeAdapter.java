@@ -1,4 +1,4 @@
-package com.example.ainterak;
+package com.example.ainterak.MenuSlider;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -6,6 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.example.ainterak.Buske;
+import com.example.ainterak.R;
 
 /*Code is taken from https://www.binpress.com/android-recyclerview-cardview-guide/ with some slight adaptions*/
 public class BuskeAdapter extends RecyclerView.Adapter<BuskeAdapter.MyViewHolder> {

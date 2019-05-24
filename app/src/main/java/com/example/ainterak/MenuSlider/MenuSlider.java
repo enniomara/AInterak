@@ -1,4 +1,4 @@
-package com.example.ainterak;
+package com.example.ainterak.MenuSlider;
 
 import android.arch.lifecycle.Observer;
 import android.graphics.Color;
@@ -9,9 +9,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.ainterak.Buske;
+import com.example.ainterak.BuskeRepository;
+import com.example.ainterak.R;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MenuSlider {
