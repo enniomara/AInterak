@@ -17,7 +17,7 @@ import java.util.List;
 public class MenuSlider {
 
     private SupportActivity activity;
-    private SlidingUpPanelLayout mLayout;
+    SlidingUpPanelLayout mLayout;
     private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
