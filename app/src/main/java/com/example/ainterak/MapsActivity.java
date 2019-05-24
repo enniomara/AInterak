@@ -103,7 +103,7 @@ public class MapsActivity extends FragmentActivity implements
         });
 
         // Collapse the menuSlider if a click on the map is registered
-        mMap.setOnMapClickListener(v -> menuSlider.collapseSlider());
+        infoWindowManager.setOnMapClickListener(v -> menuSlider.collapseSlider());
 
         addBuskarToMap();
     }
