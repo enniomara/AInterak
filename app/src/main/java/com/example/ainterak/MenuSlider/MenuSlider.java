@@ -1,27 +1,26 @@
-package com.example.ainterak;
+package com.example.ainterak.MenuSlider;
 
-import android.arch.lifecycle.Observer;
 import android.graphics.Color;
-import android.support.annotation.Nullable;
 import android.support.v4.app.SupportActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.ainterak.Buske;
+import com.example.ainterak.BuskeRepository;
+import com.example.ainterak.R;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class MenuSlider {
 
     private SupportActivity activity;
-    SlidingUpPanelLayout mLayout;
+    private SlidingUpPanelLayout mLayout;
     private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
-    static final float anchorPoint = 0.3f;
+    private MenuSliderViewHolder.OnClickListener itemClickListener;
+    public static final float anchorPoint = 0.3f;
 
     private BuskeRepository buskeRepository;
 
@@ -71,22 +70,6 @@ public class MenuSlider {
 
             }
         });
-
-        buskeRepository.findAll().observe(activity, new Observer<List<Buske>>() {
-            @Override
-            public void onChanged(@Nullable List<Buske> buskar) {
-                if (buskar == null) {
-                    return;
-                }
-
-                ArrayList<String> names = new ArrayList<>();
-                for (Buske buske : buskar) {
-                    names.add(buske.name);
-                }
-
-                setNewDataset(names.toArray(new String[buskar.size()]));
-            }
-        });
     }
 
     /**
@@ -98,8 +81,12 @@ public class MenuSlider {
         mLayout.addPanelSlideListener(panelSlideListener);
     }
 
-    public void setNewDataset(String[] dataset) {
-        mAdapter = new MyAdapter(dataset);
+    public void registerSlidingPanelItemClickListener(MenuSliderViewHolder.OnClickListener listener) {
+        this.itemClickListener = listener;
+    }
+
+    public void setNewDataset(Buske[] dataset) {
+        mAdapter = new BuskeAdapter(dataset, this.itemClickListener);
         recyclerView.setAdapter(mAdapter);
     }
 
@@ -108,5 +95,9 @@ public class MenuSlider {
      */
     public void collapseSlider() {
         mLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+    }
+
+    public SlidingUpPanelLayout getSlidingPanelLayout() {
+        return this.mLayout;
     }
 }
