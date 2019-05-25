@@ -186,8 +186,8 @@ public class MapsActivity extends FragmentActivity implements
                 latLngBuilder.include(new LatLng(location.getLatitude(), location.getLongitude()));
 
                 // If panel is set to it's anchor point, show markers above it
-                if (menuSlider.mLayout.getPanelState() == SlidingUpPanelLayout.PanelState.ANCHORED) {
-                    int bottomPadding = (int) (menuSlider.mLayout.getAnchorPoint() * height);
+                if (menuSlider.getSlidingPanelLayout().getPanelState() == SlidingUpPanelLayout.PanelState.ANCHORED) {
+                    int bottomPadding = (int) (menuSlider.getSlidingPanelLayout().getAnchorPoint() * height);
                     mMap.setPadding(0, 0, 0, bottomPadding);
                     mMap.moveCamera(CameraUpdateFactory
                             .newLatLngBounds(latLngBuilder.build(), width, height, padding)
