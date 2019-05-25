@@ -86,6 +86,14 @@ public class MenuSlider {
     }
 
     public void setNewDataset(Buske[] dataset) {
+        TextView textView = activity.findViewById(R.id.instructions);
+        // If no buskar exist, show instructions
+        if (dataset.length == 0) {
+            textView.setVisibility(View.VISIBLE);
+        } else {
+            textView.setVisibility(View.GONE);
+        }
+
         mAdapter = new BuskeAdapter(dataset, this.itemClickListener);
         recyclerView.setAdapter(mAdapter);
     }
