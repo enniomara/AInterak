@@ -21,4 +21,5 @@
     <string name="my_bushes_slider">Mina Buskar</string>
     <string name="buske_deleted">Buske borttagen</string>
     <string name="buske_created">Buske sparad</string>
+    <string name="edit_not_added">Vi har för tillfället inte lagt till möjligheten att ändra buskar.</string>
 </resources>

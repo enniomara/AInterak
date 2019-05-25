@@ -78,7 +78,7 @@ public class InfoFragment extends Fragment {
         final View.OnClickListener onClickListenerEdit = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(), "Vi har för tillfället inte lagt till möjligheten att ändra buskar.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.edit_not_added, Toast.LENGTH_SHORT).show();
             }
         };
         view.findViewById(R.id.marker_edit).setOnClickListener(onClickListenerEdit);
