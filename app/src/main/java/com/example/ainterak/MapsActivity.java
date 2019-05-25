@@ -30,6 +30,7 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MapsActivity extends FragmentActivity implements
         OnMapReadyCallback,
@@ -41,7 +42,8 @@ public class MapsActivity extends FragmentActivity implements
     private LocationProvider mLocationProvider;
     View mapView;
     private BuskeRepository buskeRepository;
-    private HashMap<Marker, InfoWindow> infoWindowMap;
+    private Map<Marker, InfoWindow> infoWindowMap;
+    private Map<Buske, Marker> buskeMarkerMap;
     private InfoWindowManager infoWindowManager;
     private final InfoWindow.MarkerSpecification OFFSET = new InfoWindow.MarkerSpecification(0, 100);
     private MenuSlider menuSlider;
@@ -142,6 +144,9 @@ public class MapsActivity extends FragmentActivity implements
                 infoWindowManager.toggle(prevWindow);
             }
             infoWindowMap = new HashMap<>();
+            buskeMarkerMap = new HashMap<>();
+            menuSlider.setNewDataset(buskar.toArray(new Buske[0]));
+
             // If there are no saved bushes, center map to current location of user
             if (buskar.isEmpty()) {
                 mLocationProvider.getLocation().addOnSuccessListener(this, (Location location) -> {
@@ -165,6 +170,7 @@ public class MapsActivity extends FragmentActivity implements
                 );
                 InfoFragment infoFragment = InfoFragment.newInstance(buske);
                 InfoWindow infowindow = new InfoWindow(marker, OFFSET, infoFragment);
+                buskeMarkerMap.put(buske, marker);
                 infoWindowMap.put(marker, infowindow);
                 latLngBuilder.include(latLng);
             }
@@ -194,6 +200,17 @@ public class MapsActivity extends FragmentActivity implements
     @Override
     public boolean onMarkerClick(Marker marker) {
         InfoWindow infoWindow = infoWindowMap.get(marker);
+        toggleInfoWindow(marker, infoWindow);
+        return true;
+    }
+
+    /**
+     * Open a marker's infowindow
+     *
+     * @param marker
+     * @param infoWindow
+     */
+    private void toggleInfoWindow(Marker marker, InfoWindow infoWindow) {
         prevWindow = infoWindow;
         mMap.animateCamera(CameraUpdateFactory
                 .newLatLngZoom(marker.getPosition(), mMap.getCameraPosition().zoom), 200, new GoogleMap.CancelableCallback() {
@@ -209,7 +226,6 @@ public class MapsActivity extends FragmentActivity implements
 
             }
         });
-        return true;
     }
 
     public void openEditMarker(View view) {
@@ -271,5 +287,28 @@ public class MapsActivity extends FragmentActivity implements
             public void onPanelStateChanged(View panel, SlidingUpPanelLayout.PanelState previousState, SlidingUpPanelLayout.PanelState newState) {
             }
         });
+
+        // When a buske is clicked in the sliding window, open it in the map
+        menuSlider.registerSlidingPanelItemClickListener((Buske buske) -> {
+            if (buske == null) return;
+
+            toggleInfoWindowFromBuske(buske);
+
+            // Set panel state to anchored if it is expanded. Otherwise the infowindow is not shown.
+            if (menuSlider.getSlidingPanelLayout().getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
+                menuSlider.getSlidingPanelLayout().setPanelState(SlidingUpPanelLayout.PanelState.ANCHORED);
+            }
+        });
+    }
+
+    /**
+     * Toggle an infowindow from a given buske
+     *
+     * @param buske
+     */
+    public void toggleInfoWindowFromBuske(Buske buske) {
+        Marker marker = buskeMarkerMap.get(buske);
+        InfoWindow infoWindow = infoWindowMap.get(marker);
+        toggleInfoWindow(marker, infoWindow);
     }
 }

@@ -11,45 +11,34 @@ import com.example.ainterak.Buske;
 import com.example.ainterak.R;
 
 /*Code is taken from https://www.binpress.com/android-recyclerview-cardview-guide/ with some slight adaptions*/
-public class BuskeAdapter extends RecyclerView.Adapter<BuskeAdapter.MyViewHolder> {
+public class BuskeAdapter extends RecyclerView.Adapter<MenuSliderViewHolder> {
     private Buske[] buskeList;
-
-    // Provide a reference to the views for each data item
-    // Complex data items may need more than one view per item, and
-    // you provide access to all the views for a data item in a view holder
-    public static class MyViewHolder extends RecyclerView.ViewHolder {
-        // each data item is just a string in this case
-        public TextView textView;
-        public ImageView imageView;
-
-        public MyViewHolder(View v) {
-            super(v);
-            textView = v.findViewById(R.id.card_title);
-            /*imageView = v.findViewById(R.id.card_image);*/
-        }
-    }
+    private MenuSliderViewHolder.OnClickListener clickListener;
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public BuskeAdapter(Buske[] buskeList) {
+    public BuskeAdapter(Buske[] buskeList, MenuSliderViewHolder.OnClickListener listener) {
         this.buskeList = buskeList;
+        this.clickListener = listener;
     }
 
     // Create new views (invoked by the layout manager)
     @Override
-    public BuskeAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MenuSliderViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // create a new view
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_layout, parent, false);
 
-        MyViewHolder vh = new MyViewHolder(v);
+        MenuSliderViewHolder vh = new MenuSliderViewHolder(v);
         return vh;
     }
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+    public void onBindViewHolder(MenuSliderViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         holder.textView.setText(buskeList[position].name);
+        holder.setBuske(buskeList[position]);
+        holder.setOnClickListener(clickListener);
 
     }
 

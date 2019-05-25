@@ -1,8 +1,6 @@
 package com.example.ainterak.MenuSlider;
 
-import android.arch.lifecycle.Observer;
 import android.graphics.Color;
-import android.support.annotation.Nullable;
 import android.support.v4.app.SupportActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,8 +12,6 @@ import com.example.ainterak.BuskeRepository;
 import com.example.ainterak.R;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
-import java.util.List;
-
 public class MenuSlider {
 
     private SupportActivity activity;
@@ -23,7 +19,8 @@ public class MenuSlider {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
-    static final float anchorPoint = 0.3f;
+    private MenuSliderViewHolder.OnClickListener itemClickListener;
+    public static final float anchorPoint = 0.3f;
 
     private BuskeRepository buskeRepository;
 
@@ -73,17 +70,6 @@ public class MenuSlider {
 
             }
         });
-
-        buskeRepository.findAll().observe(activity, new Observer<List<Buske>>() {
-            @Override
-            public void onChanged(@Nullable List<Buske> buskar) {
-                if (buskar == null) {
-                    return;
-                }
-
-                setNewDataset(buskar.toArray(new Buske[0]));
-            }
-        });
     }
 
     /**
@@ -95,8 +81,12 @@ public class MenuSlider {
         mLayout.addPanelSlideListener(panelSlideListener);
     }
 
+    public void registerSlidingPanelItemClickListener(MenuSliderViewHolder.OnClickListener listener) {
+        this.itemClickListener = listener;
+    }
+
     public void setNewDataset(Buske[] dataset) {
-        mAdapter = new BuskeAdapter(dataset);
+        mAdapter = new BuskeAdapter(dataset, this.itemClickListener);
         recyclerView.setAdapter(mAdapter);
     }
 
@@ -105,5 +95,9 @@ public class MenuSlider {
      */
     public void collapseSlider() {
         mLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+    }
+
+    public SlidingUpPanelLayout getSlidingPanelLayout() {
+        return this.mLayout;
     }
 }
