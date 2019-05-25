@@ -18,9 +18,18 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.Launcher"
         tools:replace="android:theme">
-        <activity android:name=".CompassActivity" />
-        <activity android:name=".AddMarkerActivity" />
-        <activity android:name=".MapsActivity" />
+        <activity
+            android:name=".CompassActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".AddMarkerActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".MapsActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -35,7 +44,9 @@
 
         <activity
             android:name=".PermissionCheckActivity"
-            android:noHistory="true">
+            android:configChanges="orientation"
+            android:noHistory="true"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
