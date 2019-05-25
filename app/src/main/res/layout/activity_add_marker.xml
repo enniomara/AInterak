@@ -38,7 +38,21 @@
         android:layout_weight="0.6"
         android:orientation="vertical"
         android:id="@+id/marker_info">
-
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <ImageButton
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@android:drawable/ic_menu_camera"
+                android:id="@+id/fake_camera"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/no_image"
+                android:gravity="center"/>
+        </LinearLayout>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
