@@ -8,7 +8,9 @@
     android:gravity="bottom"
     sothree:umanoPanelHeight="68dp"
     sothree:umanoScrollableView="@id/menu_list"
-    sothree:umanoShadowHeight="2dp">
+    sothree:umanoShadowHeight="2dp"
+    sothree:umanoInitialState="anchored"
+    >
 
     <RelativeLayout
         android:id="@+id/mapContainer"
