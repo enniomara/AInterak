@@ -58,7 +58,7 @@ public class InfoFragment extends Fragment {
                         .setMessage(R.string.buske_delete_description)
                         .setPositiveButton(R.string.yes, (DialogInterface dialog, int which) -> {
                             buskeRepository.delete(buske);
-                            Toast.makeText(getContext(), "Buske removed", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "Buske borttagen", Toast.LENGTH_SHORT).show();
                         })
                         .setNegativeButton(R.string.no, (DialogInterface dialog, int which) -> {
                         });
@@ -78,7 +78,7 @@ public class InfoFragment extends Fragment {
         final View.OnClickListener onClickListenerEdit = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(), "We have currently not implemented edit functionality.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Vi har för tillfället inte lagt till möjligheten att ändra buskar.", Toast.LENGTH_SHORT).show();
             }
         };
         view.findViewById(R.id.marker_edit).setOnClickListener(onClickListenerEdit);
