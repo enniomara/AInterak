@@ -7,6 +7,7 @@
     android:layout_height="match_parent"
     android:gravity="bottom"
     sothree:umanoPanelHeight="68dp"
+    sothree:umanoScrollableView="@id/menu_list"
     sothree:umanoShadowHeight="2dp">
 
     <RelativeLayout
