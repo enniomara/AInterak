@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,6 +41,14 @@ public class AddMarkerActivity extends FragmentActivity implements
         mapFragment.getMapAsync(this);
 
         buskeRepository = new BuskeRepository(getApplicationContext());
+        ImageButton camera = findViewById(R.id.fake_camera);
+        final View.OnClickListener onClickListenerCamera = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "We have currently not implemented camera functionality.", Toast.LENGTH_SHORT).show();
+            }
+        };
+        camera.setOnClickListener(onClickListenerCamera);
 
         try {
             mLocationProvider = new LocationProvider(this);
