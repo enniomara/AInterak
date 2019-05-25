@@ -2,8 +2,6 @@ package com.example.ainterak;
 
 import android.content.Context;
 import android.content.Intent;
-import android.hardware.Sensor;
-import android.hardware.SensorManager;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraManager;
 import android.location.Location;
@@ -29,7 +27,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.util.HashMap;
@@ -51,11 +48,9 @@ public class MapsActivity extends FragmentActivity implements
     private MenuSlider menuSlider;
     private InfoWindow prevWindow = null;
 
-    private SensorManager mSensorManager;
-    private Sensor mAccelerometer;
+    // For the flashlight
     private ShakeDetector mShakeDetector;
-
-    private boolean flashLightStatus = false;
+    private boolean isFlashLightOn = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,14 +83,11 @@ public class MapsActivity extends FragmentActivity implements
             Log.d("locationD", location.getLongitude() + " latitude " + location.getLatitude());
         });
 
-        initShake();
+        startShakeDetector();
     }
 
-    private void initShake(){
-        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        mAccelerometer = mSensorManager
-                .getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        mShakeDetector = new ShakeDetector();
+    private void startShakeDetector() {
+        mShakeDetector = new ShakeDetector(this);
         mShakeDetector.setOnShakeListener(count -> {
             if (count >= 3) {
                 try {
@@ -107,17 +99,18 @@ public class MapsActivity extends FragmentActivity implements
         });
     }
 
-    private void toggleTorch() throws CameraAccessException{
+    private void toggleTorch() throws CameraAccessException {
         CameraManager cameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
         String cameraId = cameraManager.getCameraIdList()[0];
-        if (flashLightStatus){
+        if (isFlashLightOn) {
             cameraManager.setTorchMode(cameraId, false);
-            flashLightStatus = false;
+            isFlashLightOn = false;
         } else {
             cameraManager.setTorchMode(cameraId, true);
-            flashLightStatus = true;
+            isFlashLightOn = true;
         }
     }
+
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
@@ -148,15 +141,13 @@ public class MapsActivity extends FragmentActivity implements
     @Override
     public void onResume() {
         super.onResume();
-        // Add the following line to register the Session Manager Listener onResume
-        mSensorManager.registerListener(mShakeDetector, mAccelerometer,	SensorManager.SENSOR_DELAY_UI);
+        mShakeDetector.onResume();
     }
 
     @Override
     public void onPause() {
-        // Add the following line to unregister the Sensor Manager onPause
-        mSensorManager.unregisterListener(mShakeDetector);
         super.onPause();
+        mShakeDetector.onPause();
     }
 
     @Override
@@ -175,7 +166,7 @@ public class MapsActivity extends FragmentActivity implements
 
     public void openAddMarker(View view) {
         Intent intent = new Intent(this, AddMarkerActivity.class);
-        if (flashLightStatus){
+        if (isFlashLightOn) {
             try {
                 toggleTorch();
             } catch (CameraAccessException e) {
