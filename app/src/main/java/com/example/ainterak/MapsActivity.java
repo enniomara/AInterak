@@ -106,7 +106,7 @@ public class MapsActivity extends FragmentActivity implements
         });
 
         // Collapse the menuSlider if a click on the map is registered
-        mMap.setOnMapClickListener(v -> menuSlider.collapseSlider());
+        infoWindowManager.setOnMapClickListener(v -> menuSlider.collapseSlider());
 
         addBuskarToMap();
     }
@@ -184,9 +184,20 @@ public class MapsActivity extends FragmentActivity implements
             mLocationProvider.getLocation().addOnSuccessListener(this, (Location location) -> {
                 if (location == null) return;
                 latLngBuilder.include(new LatLng(location.getLatitude(), location.getLongitude()));
-                mMap.moveCamera(CameraUpdateFactory
-                        .newLatLngBounds(latLngBuilder.build(), width, height, padding)
-                );
+
+                // If panel is set to it's anchor point, show markers above it
+                if (menuSlider.mLayout.getPanelState() == SlidingUpPanelLayout.PanelState.ANCHORED) {
+                    int bottomPadding = (int) (menuSlider.mLayout.getAnchorPoint() * height);
+                    mMap.setPadding(0, 0, 0, bottomPadding);
+                    mMap.moveCamera(CameraUpdateFactory
+                            .newLatLngBounds(latLngBuilder.build(), width, height, padding)
+                    );
+                    mMap.setPadding(0, 0, 0, 0);
+                } else {
+                    mMap.moveCamera(CameraUpdateFactory
+                            .newLatLngBounds(latLngBuilder.build(), width, height, padding)
+                    );
+                }
             });
 
             // Limit zoom to 16. If it's higher then it is hard to find where on the map the user is.
