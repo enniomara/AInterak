@@ -58,7 +58,7 @@ public class InfoFragment extends Fragment {
                         .setMessage(R.string.buske_delete_description)
                         .setPositiveButton(R.string.yes, (DialogInterface dialog, int which) -> {
                             buskeRepository.delete(buske);
-                            Toast.makeText(getContext(), "Buske borttagen", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), R.string.buske_deleted, Toast.LENGTH_SHORT).show();
                         })
                         .setNegativeButton(R.string.no, (DialogInterface dialog, int which) -> {
                         });

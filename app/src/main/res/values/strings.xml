@@ -12,11 +12,13 @@
     <string name="description">Innehåll:</string>
     <string name="name">Buskens namn:</string>
     <string name="add_buske__cancel_title">Är du säker att du vill du slänga denna busken?</string>
-    <string name="add_buske__cancel_description">Om du godkänner, så kommer busken slängas.</string>
+    <string name="add_buske__cancel_description">Om du godkänner, kommer busken slängas.</string>
     <string name="yes">Ja</string>
     <string name="no">Nej</string>
     <string name="buske_delete_title">Är du säker att du vill ta bort denna busken?</string>
-    <string name="buske_delete_description">Om du godkänner, så kommer busken att tas bort.</string>
+    <string name="buske_delete_description">Om du godkänner, kommer busken att tas bort.</string>
     <string name="buske_distance">Busken är %.2f m från din plats</string>
     <string name="my_bushes_slider">Mina Buskar</string>
+    <string name="buske_deleted">Buske borttagen</string>
+    <string name="buske_created">Buske sparad</string>
 </resources>

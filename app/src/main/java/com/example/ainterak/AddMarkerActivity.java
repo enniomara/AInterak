@@ -61,7 +61,7 @@ public class AddMarkerActivity extends FragmentActivity implements
         buske.longitude = latLng.longitude;
 
         buskeRepository.create(buske);
-        Toast.makeText(this, "Buske skapad", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.buske_created, Toast.LENGTH_SHORT).show();
         finish();
     }
 
