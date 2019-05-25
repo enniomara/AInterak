@@ -19,4 +19,6 @@
     <string name="buske_delete_description">By doing this, your buske will be removed.</string>
     <string name="buske_distance">The buske is %.2f m from your location</string>
     <string name="my_bushes_slider">Mina Buskar</string>
+    <string name="camera_not_implemented">Vi har för tillfället inte implementerat kamera funktioner.</string>
+    <string name="no_image">No image set</string>
 </resources>

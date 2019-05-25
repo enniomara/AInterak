@@ -45,7 +45,7 @@ public class AddMarkerActivity extends FragmentActivity implements
         final View.OnClickListener onClickListenerCamera = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "We have currently not implemented camera functionality.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), R.string.camera_not_implemented, Toast.LENGTH_SHORT).show();
             }
         };
         camera.setOnClickListener(onClickListenerCamera);
