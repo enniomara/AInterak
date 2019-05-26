@@ -76,8 +76,16 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="100dp">
-
+            android:layout_height="100dp"
+            android:gravity="center">
+            <Button
+                android:id="@+id/marker_cancel_button"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_toStartOf="@+id/marker_save_button"
+                android:layout_marginEnd="16dp"
+                android:onClick="cancelBtnClick"
+                android:text="@string/cancel" />
             <Button
                 android:id="@+id/marker_save_button"
                 android:layout_width="100dp"
@@ -85,15 +93,6 @@
                 android:layout_marginStart="16dp"
                 android:onClick="saveMarker"
                 android:text="@string/save" />
-
-            <Button
-                android:id="@+id/marker_cancel_button"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_marginEnd="16dp"
-                android:onClick="cancelBtnClick"
-                android:text="@string/cancel" />
         </RelativeLayout>
 
 

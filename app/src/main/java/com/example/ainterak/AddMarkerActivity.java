@@ -66,7 +66,7 @@ public class AddMarkerActivity extends AppCompatActivity implements
         buske.longitude = latLng.longitude;
 
         buskeRepository.create(buske);
-        Toast.makeText(this, "Buske created", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.buske_created, Toast.LENGTH_SHORT).show();
         finish();
     }
 
