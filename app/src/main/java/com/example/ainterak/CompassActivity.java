@@ -8,8 +8,9 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.location.Location;
 import android.os.Vibrator;
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
@@ -20,7 +21,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 
-public class CompassActivity extends FragmentActivity implements
+public class CompassActivity extends AppCompatActivity implements
         OnMapReadyCallback,
         SensorEventListener {
 
@@ -41,6 +42,12 @@ public class CompassActivity extends FragmentActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_compass);
+
+        Toolbar myToolbar = findViewById(R.id.toolbar_item);
+        setSupportActionBar(myToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+
         Buske buske = (Buske) getIntent().getParcelableExtra("com.example.ainterak.BUSKE");
         buskeLocation = new Location("");
         buskeLocation.setLongitude(buske.longitude);

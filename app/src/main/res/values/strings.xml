@@ -20,4 +20,8 @@
     <string name="buske_distance">The buske is %.2f m from your location</string>
     <string name="my_bushes_slider">Mina Buskar</string>
     <string name="add_buske_instruction">Du har för tillfället inga sparade buskar. För att lägga till en ny buske, klicka på den gröna plus-knappen.</string>
+    <string name="camera_not_implemented">Vi har för tillfället inte implementerat kamera funktioner.</string>
+    <string name="no_image">No image set</string>
+    <string name="add_new_buske">Lägg till ny buske</string>
+    <string name="buskes_direction">Buskens riktning</string>
 </resources>
