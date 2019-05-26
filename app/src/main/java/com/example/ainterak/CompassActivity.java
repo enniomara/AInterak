@@ -167,6 +167,11 @@ public class CompassActivity extends AppCompatActivity implements
     public void onMapReady(GoogleMap googleMap) {
     }
 
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
 
     private void getCurrentLocation() {
         fusedLocationClient.getLastLocation().addOnSuccessListener(this, location -> {
