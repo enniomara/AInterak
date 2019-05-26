@@ -198,12 +198,13 @@ public class MapsActivity extends FragmentActivity implements
                             .newLatLngBounds(latLngBuilder.build(), width, height, padding)
                     );
                 }
+
+                // Limit zoom to 16. If it's higher then it is hard to find where on the map the user is.
+                if (mMap.getCameraPosition().zoom > 16) {
+                    mMap.moveCamera(CameraUpdateFactory.zoomTo(16));
+                }
             });
 
-            // Limit zoom to 16. If it's higher then it is hard to find where on the map the user is.
-            if (mMap.getCameraPosition().zoom > 16) {
-                mMap.moveCamera(CameraUpdateFactory.zoomTo(16));
-            }
         });
 
     }
