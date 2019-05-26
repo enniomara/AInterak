@@ -22,4 +22,5 @@
     <string name="buske_deleted">Buske borttagen</string>
     <string name="buske_created">Buske sparad</string>
     <string name="edit_not_added">Vi har för tillfället inte lagt till möjligheten att ändra buskar.</string>
+    <string name="add_buske_instruction">Du har för tillfället inga sparade buskar. För att lägga till en ny buske, klicka på den gröna plus-knappen.</string>
 </resources>

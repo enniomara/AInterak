@@ -8,7 +8,9 @@
     android:gravity="bottom"
     sothree:umanoPanelHeight="68dp"
     sothree:umanoScrollableView="@id/menu_list"
-    sothree:umanoShadowHeight="2dp">
+    sothree:umanoShadowHeight="2dp"
+    sothree:umanoInitialState="anchored"
+    >
 
     <RelativeLayout
         android:id="@+id/mapContainer"
@@ -72,13 +74,27 @@
             android:id="@+id/myBushes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:layout_marginBottom="10dp"
             android:drawableTop="@drawable/ic_remove_black_24dp"
             android:text="@string/my_bushes_slider"
             android:textAlignment="center"
             android:textSize="24sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="10dp" />
+
+
+
+        <TextView
+            android:id="@+id/instructions"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text="@string/add_buske_instruction"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            android:visibility="visible" />
+
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/menu_list"
