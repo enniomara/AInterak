@@ -19,4 +19,5 @@
     <string name="buske_delete_description">By doing this, your buske will be removed.</string>
     <string name="buske_distance">The buske is %.2f m from your location</string>
     <string name="my_bushes_slider">Mina Buskar</string>
+    <string name="add_buske_instruction">Du har för tillfället inga sparade buskar. För att lägga till en ny buske, klicka på den gröna plus-knappen.</string>
 </resources>
