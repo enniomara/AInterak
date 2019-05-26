@@ -1,11 +1,13 @@
 package com.example.ainterak;
 
+import android.content.Context;
 import android.hardware.GeomagneticField;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.location.Location;
+import android.os.Vibrator;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.view.animation.Animation;
@@ -30,6 +32,10 @@ public class CompassActivity extends FragmentActivity implements
     private Sensor[] sensors;
     private GeomagneticField geoField;
     private float currentDegree = 0f;
+    private boolean isVibrating;
+    private Vibrator vibrator;
+    private float distance;
+    private long[] pattern;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +49,9 @@ public class CompassActivity extends FragmentActivity implements
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         textDistance = (TextView) findViewById(R.id.textDistance);
         imgArrow = (ImageView) findViewById(R.id.imgArrow);
+        vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        isVibrating = false;
+        pattern = new long[] {0,300,1000};
         getCurrentLocation();
         checkSensorExist();
     }
@@ -80,6 +89,18 @@ public class CompassActivity extends FragmentActivity implements
         degree = normalizeDegree(degree);
 
         updateUi(degree);
+        
+        if(!isVibrating){
+            if(distance <= 10){
+                vibrator.vibrate(pattern, 1);
+                isVibrating = true;
+            }
+        } else {
+            if(distance > 10) {
+                vibrator.cancel();
+                isVibrating = false;
+            }
+        }
     }
 
     private float normalizeDegree(float value) {
@@ -109,7 +130,7 @@ public class CompassActivity extends FragmentActivity implements
         imgArrow.startAnimation(ra);
 
         // Set distance to buske
-        float distance = currentLocation.distanceTo(buskeLocation);
+        distance = currentLocation.distanceTo(buskeLocation);
         textDistance.setText(getString(R.string.buske_distance, distance));
 
         // Used for animation
@@ -124,6 +145,8 @@ public class CompassActivity extends FragmentActivity implements
     @Override
     protected void onPause() {
         super.onPause();
+        vibrator.cancel();
+        isVibrating = false;
         unregisterSensors();
     }
 
