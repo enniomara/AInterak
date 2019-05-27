@@ -6,6 +6,7 @@ import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -364,6 +365,8 @@ public class MapsActivity extends FragmentActivity implements
             cameraManager.setTorchMode(cameraId, true);
             isFlashLightOn = true;
         }
+        Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        vibrator.vibrate(3);
     }
 
     @Override
