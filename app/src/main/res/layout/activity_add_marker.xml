@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -39,63 +40,72 @@
         android:id="@+id/marker_info"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="20dp"
         android:layout_weight="0.6"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
 
-        <TextView
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/parent_marker_name_field"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:text="@string/name"
-            android:textSize="16dp" />
+            android:layout_marginBottom="20dp"
+            app:hintTextAppearance="@style/TextInputLayout.HintText"
+            tools:text="name_field">
 
-        <EditText
-            android:id="@+id/marker_name_field"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:imeOptions="actionNext"
-            android:singleLine="true"
-            tools:text="name_field" />
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/marker_name_field"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/name"
+                android:imeOptions="actionNext"
+                android:inputType="textAutoCorrect"
+                android:singleLine="true" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:text="@string/description"
-            android:textSize="16dp" />
+        </android.support.design.widget.TextInputLayout>
 
-        <EditText
-            android:id="@+id/description_box"
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/parent_description_box"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:gravity="top|left"
-            android:inputType="textAutoCorrect|textMultiLine"
-            android:singleLine="false"
-            tools:text="description_box" />
+            app:hintTextAppearance="@style/TextInputLayout.HintText">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/description_box"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:hint="@string/description"
+                android:inputType="textAutoCorrect|textMultiLine"
+                android:lines="7"
+                android:singleLine="false" />
+        </android.support.design.widget.TextInputLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
             android:gravity="center">
+
             <Button
                 android:id="@+id/marker_cancel_button"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:layout_toStartOf="@+id/marker_save_button"
                 android:layout_marginEnd="16dp"
+                android:layout_toStartOf="@+id/marker_save_button"
                 android:onClick="cancelBtnClick"
                 android:text="@string/cancel" />
+
             <Button
                 android:id="@+id/marker_save_button"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
+                android:enabled="false"
                 android:onClick="saveMarker"
                 android:text="@string/save" />
         </RelativeLayout>
-
-
     </LinearLayout>
-
 </LinearLayout>
