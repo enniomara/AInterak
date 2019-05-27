@@ -3,6 +3,7 @@ package com.example.ainterak;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.location.Location;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
@@ -34,12 +35,15 @@ public class AddMarkerActivity extends AppCompatActivity implements
     private GoogleMap mMap;
     private BuskeRepository buskeRepository;
     private Button saveButton;
+    private MediaPlayer notification;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_marker);
+
+        notification = MediaPlayer.create(this, R.raw.notification_simple);
 
         Toolbar myToolbar = findViewById(R.id.toolbar_item);
         setSupportActionBar(myToolbar);
@@ -141,6 +145,7 @@ public class AddMarkerActivity extends AppCompatActivity implements
                 });
 
         builder.show();
+        notification.start();
     }
 
     @Override
