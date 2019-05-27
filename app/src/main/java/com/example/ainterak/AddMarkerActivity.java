@@ -7,7 +7,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -25,7 +26,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 
-public class AddMarkerActivity extends FragmentActivity implements
+public class AddMarkerActivity extends AppCompatActivity implements
         OnMapReadyCallback,
         GoogleMap.OnMyLocationClickListener {
 
@@ -39,6 +40,11 @@ public class AddMarkerActivity extends FragmentActivity implements
         setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_marker);
+
+        Toolbar myToolbar = findViewById(R.id.toolbar_item);
+        setSupportActionBar(myToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.marker_map);
@@ -154,6 +160,12 @@ public class AddMarkerActivity extends FragmentActivity implements
                 getCurrentLocation();
             }
         }, 500);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 
     private void fixateCamera(LatLng latLng) {
