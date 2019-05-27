@@ -366,7 +366,7 @@ public class MapsActivity extends FragmentActivity implements
             isFlashLightOn = true;
         }
         Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        vibrator.vibrate(3);
+        vibrator.vibrate(75);
     }
 
     @Override

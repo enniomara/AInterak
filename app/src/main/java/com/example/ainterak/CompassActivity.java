@@ -249,6 +249,6 @@ public class CompassActivity extends AppCompatActivity implements
             cameraManager.setTorchMode(cameraId, true);
             isFlashLightOn = true;
         }
-        vibrator.vibrate(3);
+        vibrator.vibrate(75);
     }
 }
