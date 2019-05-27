@@ -31,4 +31,10 @@
 
     <style name="AppTheme.Launcher.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+
+    <style name="TextInputLayout" />
+
+    <style name="TextInputLayout.HintText">
+        <item name="android:textSize">14sp</item>
+    </style>
 </resources>

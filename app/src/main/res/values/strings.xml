@@ -9,8 +9,8 @@
     <string name="permission_denied">Behörighet nekad</string>
     <string name="cancel">Avbryt</string>
     <string name="save">Spara</string>
-    <string name="description">Innehåll:</string>
-    <string name="name">Buskens namn:</string>
+    <string name="description">Innehåll</string>
+    <string name="name">Buskens namn</string>
     <string name="add_buske__cancel_title">Är du säker att du vill du slänga denna busken?</string>
     <string name="add_buske__cancel_description">Om du godkänner, kommer busken slängas.</string>
     <string name="yes">Ja</string>

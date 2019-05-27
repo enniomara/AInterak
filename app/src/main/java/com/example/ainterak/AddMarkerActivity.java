@@ -5,9 +5,13 @@ import android.content.DialogInterface;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.FragmentActivity;
-import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,6 +32,7 @@ public class AddMarkerActivity extends FragmentActivity implements
     private LocationProvider mLocationProvider;
     private GoogleMap mMap;
     private BuskeRepository buskeRepository;
+    private Button saveButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,10 +46,44 @@ public class AddMarkerActivity extends FragmentActivity implements
 
         buskeRepository = new BuskeRepository(getApplicationContext());
 
+        saveButton = findViewById(R.id.marker_save_button);
+        TextInputLayout nameInputLayout = findViewById(R.id.parent_marker_name_field);
+        // Add asterisk to name hint to mark it required
+        nameInputLayout.setHint(nameInputLayout.getHint() + "*");
+
+        // Create listeners that enabled/disables save button based on name field
+        TextInputEditText nameEditText = findViewById(R.id.marker_name_field);
+        nameEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                nameEdited(s);
+            }
+        });
         try {
             mLocationProvider = new LocationProvider(this);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    /**
+     * Action fired when the name field is edited. Enables/disabled the save button
+     *
+     * @param s
+     */
+    private void nameEdited(Editable s) {
+        if (s.toString().isEmpty()) {
+            saveButton.setEnabled(false);
+        } else {
+            saveButton.setEnabled(true);
         }
     }
 
