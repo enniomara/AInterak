@@ -15,6 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="128dp"
         android:text="@string/buske_distance"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -28,5 +29,22 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textFlashlightInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="176dp"
+        android:layout_marginTop="56dp"
+        android:layout_marginEnd="176dp"
+        android:layout_marginBottom="53dp"
+        android:text="@string/flashlight_info"
+        android:textAlignment="center"
+        android:textSize="16sp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textDistance" />
 
 </android.support.constraint.ConstraintLayout>
