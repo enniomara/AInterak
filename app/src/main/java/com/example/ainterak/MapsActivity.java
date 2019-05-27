@@ -1,8 +1,12 @@
 package com.example.ainterak;
 
+import android.content.Context;
 import android.content.Intent;
+import android.hardware.camera2.CameraAccessException;
+import android.hardware.camera2.CameraManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -49,6 +53,10 @@ public class MapsActivity extends FragmentActivity implements
     private MenuSlider menuSlider;
     private InfoWindow prevWindow = null;
 
+    // For the flashlight
+    private ShakeDetector mShakeDetector;
+    private boolean isFlashLightOn = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme);
@@ -82,6 +90,8 @@ public class MapsActivity extends FragmentActivity implements
                 Log.d("locationD", location.getLongitude() + " latitude " + location.getLatitude());
             }
         });
+
+        startShakeDetector();
     }
 
     /**
@@ -322,5 +332,52 @@ public class MapsActivity extends FragmentActivity implements
         Marker marker = buskeMarkerMap.get(buske);
         InfoWindow infoWindow = infoWindowMap.get(marker);
         toggleInfoWindow(marker, infoWindow);
+    }
+
+    /**
+     * Starts the shake detector and at 2 shakes the flashlight turns on.
+     */
+    private void startShakeDetector() {
+        mShakeDetector = new ShakeDetector(this);
+        mShakeDetector.setOnShakeListener(count -> {
+            if (count >= 2) {
+                try {
+                    toggleTorch();
+                } catch (CameraAccessException e) {
+                    Log.d("toggleD", "Torch not available");
+                }
+            }
+        });
+    }
+
+    /**
+     * Toggles the torch.
+     *
+     * @throws CameraAccessException
+     */
+    private void toggleTorch() throws CameraAccessException {
+        CameraManager cameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
+        String cameraId = cameraManager.getCameraIdList()[0];
+        if (isFlashLightOn) {
+            cameraManager.setTorchMode(cameraId, false);
+            isFlashLightOn = false;
+        } else {
+            cameraManager.setTorchMode(cameraId, true);
+            isFlashLightOn = true;
+        }
+        Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        vibrator.vibrate(75);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mShakeDetector.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mShakeDetector.onPause();
     }
 }

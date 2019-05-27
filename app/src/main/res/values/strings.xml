@@ -27,4 +27,5 @@
     <string name="no_image">No image set</string>
     <string name="add_new_buske">Lägg till ny buske</string>
     <string name="buskes_direction">Buskens riktning</string>
+    <string name="flashlight_info">Tips: Skaka mobilen för att sätta på och stänga av ficklampan</string>
 </resources>

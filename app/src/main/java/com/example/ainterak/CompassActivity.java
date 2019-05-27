@@ -6,11 +6,14 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.hardware.camera2.CameraAccessException;
+import android.hardware.camera2.CameraManager;
 import android.location.Location;
 import android.os.Vibrator;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
@@ -38,6 +41,10 @@ public class CompassActivity extends AppCompatActivity implements
     private float distance;
     private long[] pattern;
 
+    // For the flashlight
+    private ShakeDetector mShakeDetector;
+    private boolean isFlashLightOn = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +68,7 @@ public class CompassActivity extends AppCompatActivity implements
         pattern = new long[] {0,300,1000};
         getCurrentLocation();
         checkSensorExist();
+        startShakeDetector();
     }
 
     @Override
@@ -155,12 +163,14 @@ public class CompassActivity extends AppCompatActivity implements
         vibrator.cancel();
         isVibrating = false;
         unregisterSensors();
+        mShakeDetector.onPause();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         checkSensorExist();
+        mShakeDetector.onResume();
     }
 
     @Override
@@ -206,5 +216,39 @@ public class CompassActivity extends AppCompatActivity implements
         for (Sensor sensor : sensors) {
             sensorManager.unregisterListener(this, sensor);
         }
+    }
+
+    /**
+     * Starts the shake detector and at 2 shakes the flashlight turns on.
+     */
+    private void startShakeDetector() {
+        mShakeDetector = new ShakeDetector(this);
+        mShakeDetector.setOnShakeListener(count -> {
+            if (count >= 2) {
+                try {
+                    toggleTorch();
+                } catch (CameraAccessException e) {
+                    Log.d("toggleD", "Torch not available");
+                }
+            }
+        });
+    }
+
+    /**
+     * Toggles the torch.
+     *
+     * @throws CameraAccessException
+     */
+    private void toggleTorch() throws CameraAccessException {
+        CameraManager cameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
+        String cameraId = cameraManager.getCameraIdList()[0];
+        if (isFlashLightOn) {
+            cameraManager.setTorchMode(cameraId, false);
+            isFlashLightOn = false;
+        } else {
+            cameraManager.setTorchMode(cameraId, true);
+            isFlashLightOn = true;
+        }
+        vibrator.vibrate(75);
     }
 }
