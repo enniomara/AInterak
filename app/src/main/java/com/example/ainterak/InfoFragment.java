@@ -44,7 +44,7 @@ public class InfoFragment extends Fragment {
         TextView title = (TextView) view.findViewById(R.id.marker_text);
         TextView description = (TextView) view.findViewById(R.id.marker_description);
         title.setText(buske.name);
-        notification = MediaPlayer.create(this.getContext(), R.raw.notification_simple);
+        notification = MediaPlayer.create(this.getContext(), R.raw.alert_error);
         description.setText(buske.description);
         return view;
     }

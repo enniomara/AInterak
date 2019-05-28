@@ -43,7 +43,7 @@ public class AddMarkerActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_marker);
 
-        notification = MediaPlayer.create(this, R.raw.notification_simple);
+        notification = MediaPlayer.create(this, R.raw.alert_error);
 
         Toolbar myToolbar = findViewById(R.id.toolbar_item);
         setSupportActionBar(myToolbar);
