@@ -7,6 +7,7 @@ package com.example.ainterak;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.support.annotation.Nullable;
@@ -24,6 +25,7 @@ public class InfoFragment extends Fragment {
 
     private BuskeRepository buskeRepository = new BuskeRepository(getContext());
     private Buske buske;
+    private MediaPlayer notification;
 
     public static InfoFragment newInstance(Buske buske) {
         InfoFragment infoFragment = new InfoFragment();
@@ -42,6 +44,7 @@ public class InfoFragment extends Fragment {
         TextView title = (TextView) view.findViewById(R.id.marker_text);
         TextView description = (TextView) view.findViewById(R.id.marker_description);
         title.setText(buske.name);
+        notification = MediaPlayer.create(this.getContext(), R.raw.alert_error);
         description.setText(buske.description);
         return view;
     }
@@ -63,6 +66,7 @@ public class InfoFragment extends Fragment {
                         .setNegativeButton(R.string.no, (DialogInterface dialog, int which) -> {
                         });
                 builder.show();
+                notification.start();
             }
         };
         view.findViewById(R.id.marker_delete).setOnClickListener(onClickListenerDelete);
